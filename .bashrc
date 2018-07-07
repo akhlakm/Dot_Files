@@ -483,6 +483,10 @@ git show [object]
 	show commited changes of the object
 	default object is current working directory/branch
 
+git push -u origin my_branch
+	specify -u to create track remote branch
+	this sets the remote upstream, so only need to specify once
+
 git branch
 
 git branch -a
