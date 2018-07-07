@@ -158,6 +158,7 @@ if havecmd git; then
 	alias gitnb='git checkout -b'
 
 	# Version control dotfiles
+	# Inspired by: https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
 	if __test -d ~/.dotrepo; then
 		dot() {
 			git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
@@ -180,8 +181,8 @@ if havecmd git; then
 		}
 	fi
 
-else 
-	echo "Git not installed. Please install it."
+else
+	echo "Git not installed. Please consider installing it."
 fi
 
 # Terminal title and prompt
@@ -372,6 +373,12 @@ function open () {
 # example 'google "Weather Today"'
 google() {
 	open "https://www.google.com/search?q=$@"
+}
+
+localhost() {
+	local port=${2:-8080}
+	local path="${1:-/}"
+	open "http://localhost:${port}${path}"
 }
 
 # Swap two files.
