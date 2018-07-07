@@ -4,8 +4,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+	*i*) ;;
+	  *) return;;
 esac
 
 # don't put duplicate lines or lines starting with space in the history.
@@ -32,12 +32,12 @@ shopt -s checkwinsize
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+	debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
+	xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -46,42 +46,42 @@ esac
 #force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	# We have color support; assume it's compliant with Ecma-48
 	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
 	# a case would tend to support setf rather than setaf.)
 	color_prompt=yes
-    else
+	else
 	color_prompt=
-    fi
+	fi
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
+	PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+	;;
 *)
-    ;;
+	;;
 esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	alias ls='ls --color=auto'
+	#alias dir='dir --color=auto'
+	#alias vdir='vdir --color=auto'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
 fi
 
 # colored GCC warnings and errors
@@ -140,8 +140,8 @@ if havecmd git; then
 	if [[ ! -f ~/.git-prompt.sh ]]; then
 		# download and use the official one
 		echo "Downloading git-prompt ..."
-		wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh && source ~/.git-prompt.sh
-		echo "git-prompt loaded."
+		wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh &&\
+		source ~/.git-prompt.sh && echo "git-prompt loaded."
 	else
 		source ~/.git-prompt.sh
 	fi
@@ -167,11 +167,13 @@ if havecmd git; then
 		dotrepo() {
 			cd ~
 			git init --bare .dotrepo
+			read -p "Press ENTER to continue ..."
 			dot() {
 				git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
 			}
+			# we are excluding everything, you have to force add to repo
+			# use 'dot add -f <file>'
 			echo '*' >> .dotrepo/info/exclude
-			read -p "Press ENTER to continue ..."
 			dot config --local status.showUntrackedFiles no
 			dot status
 			echo
@@ -188,7 +190,7 @@ fi
 # Terminal title and prompt
 # ---------------------------------
 
-# Prints the latest exit code
+# Prints the latest not zero exit code
 # inspired by https://github.com/slomkowski/bash-full-of-colors
 __exit_code() {
 	local exit_code=$?
@@ -199,7 +201,7 @@ __exit_code() {
 	fi
 }
 
-# set length of pwd shown on prompt and title
+# Set the length of pwd shown on prompt and title
 export PROMPT_DIRTRIM=2
 
 # Change the user, host and path colors.
@@ -213,28 +215,28 @@ xterm_setcolor() {
 
 	# set prompt style
 	if havecmd __git_ps1; then
-	    PS1="${debian_chroot:+($debian_chroot)}\[${user}\]\u\[${BLACK}\]@\[${host}\]\h\[${WHITE}\]:\[${path}\]\w\[$MAGENTA\]\$(__git_ps1)\[${NC}\]\$(__exit_code)\$ "
+		PS1="${debian_chroot:+($debian_chroot)}\[${user}\]\u\[${BLACK}\]@\[${host}\]\h\[${WHITE}\]:\[${path}\]\w\[$MAGENTA\]\$(__git_ps1)\[${NC}\]\$(__exit_code)\$ "
 	else
 		PS1="${debian_chroot:+($debian_chroot)}\[${user}\]\u\[${BLACK}\]@\[${host}\]\h\[${WHITE}\]:\[${path}\]\w\[$MAGENTA\]\[${NC}\]\$(__exit_code)\$ "
 	fi
 
-    # set terminal title
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\h: \w\a\]$PS1"
+	# set terminal title
+	PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\h: \w\a\]$PS1"
 }
 
-# set default colors
+# Set default colors
 xterm_setcolor $green $GREEN $BLUE
 
 # Common terminal aliases
 # ---------------------------------
 
-# Define ls to show files as tree
+# show files as tree
 alias ls='ls -lh --color=auto'
 
 # clear screen
 alias cls='clear'
 
-# default editor
+# Set the default editor
 if havecmd subl; then
 	export EDITOR=subl
 else
@@ -278,11 +280,11 @@ alias .....='cd ../../../..'
 
 # Hide pushd popd outputs
 pushd () {
-    command pushd "$@" > /dev/null
+	command pushd "$@" > /dev/null
 }
 
 popd () {
-    command popd "$@" > /dev/null
+	command popd "$@" > /dev/null
 }
 
 cd() {
@@ -307,8 +309,8 @@ alias p='pwd'
 # Working Directory
 # https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
-    export WDHOME=$HOME/.wd
-    source $WDHOME/wd.sh
+	export WDHOME=$HOME/.wd
+	source $WDHOME/wd.sh
 else
 	# You may want to install working-directory by running 'installwd'
 	installwd() {
@@ -316,8 +318,8 @@ else
 		git clone https://github.com/karlin/working-directory.git &&\
 		cd working-directory &&\
 		./install.sh
-	    export WDHOME=$HOME/.wd
-	    source $WDHOME/wd.sh &&\
+		export WDHOME=$HOME/.wd
+		source $WDHOME/wd.sh &&\
 		unset installwd
 	}
 fi
@@ -336,10 +338,10 @@ alias cddoc='cd ~/Documents'
 alias cdt='cd /tmp'
 alias cdmed='cd /media/$(whoami)'
 
-__test -d ~/Dropbox && alias cddb='cd ~/Dropbox'
-__test -d ~/data && alias cdd='cd ~/data'
-__test -d ~/programs && alias cdp='cd ~/programs'
-__test -d ~/mnt && alias cdm='cd ~/mnt'
+__test -d ~/Dropbox &&          alias cddb='cd ~/Dropbox'
+__test -d ~/data &&             alias cdd='cd ~/data'
+__test -d ~/programs &&         alias cdp='cd ~/programs'
+__test -d ~/mnt &&              alias cdm='cd ~/mnt'
 
 # Installed applications helpers
 # ---------------------------------
@@ -352,7 +354,7 @@ alias gimp='flatpak run org.gimp.GIMP'
 # Useful tools
 # ---------------------------------
 
-# open nautilus here or somewhere
+# Open nautilus here or somewhere
 here() {
 	local path
 	if havecmd nautilus; then
@@ -361,7 +363,7 @@ here() {
 	fi
 }
 
-# open a new terminal at a specific directory
+# Open a new terminal at a specific directory
 alias term="gnome-terminal --working-directory"
 
 # open file with default application
@@ -369,7 +371,7 @@ function open () {
   xdg-open "$@">/dev/null 2>&1
 }
 
-# quick google search
+# Quick google search
 # example 'google "Weather Today"'
 google() {
 	open "https://www.google.com/search?q=$@"
@@ -377,14 +379,14 @@ google() {
 
 # usage: localhost <path> <port>
 localhost() {
-	local port=${2:-8080}
+	local port=${2:-8000}
 	local path="${1:-/}"
 	open "http://localhost:${port}${path}"
 }
 
 # Swap two files.
-# If the second file doesn't exist, empty one is created.
-# Be careful, both files will exist, only contents are swapped.
+# If the second file doesn't exist, empty one is created for it.
+# Be careful, both files will exist, only contents are exchaned.
 swap() {
 	local file1 file2
 	file1="$1"; file2="$2"
@@ -426,11 +428,11 @@ pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 
 # For some reason, rot13 pops up everywhere
 rot13 () {
-    if [ $# -eq 0 ]; then
-        tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
-    else
-        echo $* | tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
-    fi
+	if [ $# -eq 0 ]; then
+		tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
+	else
+		echo $* | tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
+	fi
 }
 
 # END OF BASHRC DEFINITIONS
@@ -440,7 +442,7 @@ rot13 () {
 # -----------------------------------------------------------------
 
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+	. ~/.bash_aliases
 else
 	cat << EOF > ~/.bash_aliases
 # ~/.bash_aliases for ${USER}@${HOSTNAME}
@@ -459,15 +461,16 @@ fi
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
+	. /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+	. /etc/bash_completion
   fi
 fi
 
 
 # Displays a git cheatsheet
 # Useful for noobs like me
+# @Todo: this can not be the right place for this function? Or is it? ;)
 if havecmd git; then
 
 cheat-git() {
