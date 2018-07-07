@@ -56,49 +56,12 @@ if [ -n "$force_color_prompt" ]; then
 	fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-	PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-	;;
-*)
-	;;
-esac
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-	alias ls='ls --color=auto'
-	#alias dir='dir --color=auto'
-	#alias vdir='vdir --color=auto'
-
-	alias grep='grep --color=auto'
-	alias fgrep='fgrep --color=auto'
-	alias egrep='egrep --color=auto'
-fi
-
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# do not unset $color_prompt, we need it in xterm_setcolor()
+unset force_color_prompt
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# END OF DEFAULT UBUNTU DEFINITIONS
-# -----------------------------------------------------------------
-# BEGIN BASHRC DEFINITIONS
 
 # some stuff we will need later on
 # ---------------------------------
@@ -209,6 +172,7 @@ __exit_code() {
 export PROMPT_DIRTRIM=2
 
 # Change the user, host and path colors.
+# Also set the terminal title.
 # Call from ~/.bash_aliases
 xterm_setcolor() {
 	local user host path
@@ -217,15 +181,35 @@ xterm_setcolor() {
 	host="${2:-$CYAN}"
 	path="${3:-$BLUE}"
 
-	# set prompt style
-	if havecmd __git_ps1; then
-		PS1="${debian_chroot:+($debian_chroot)}\[${user}\]\u\[${BLACK}\]@\[${host}\]\h\[${WHITE}\]:\[${path}\]\w\[$MAGENTA\]\$(__git_ps1)\[${NC}\]\$(__exit_code)\$ "
+	# Set prompt style
+	if [ "$color_prompt" = yes ]; then
+		# Ubuntu default
+		# PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+		# Our custom style
+		if havecmd __git_ps1; then
+			PS1="${debian_chroot:+($debian_chroot)}\[${user}\]\u\[${BLACK}\]@\[${host}\]\h\[${WHITE}\]:\[${path}\]\w\[$MAGENTA\]\$(__git_ps1)\[${NC}\]\$(__exit_code)\$ "
+		else
+			PS1="${debian_chroot:+($debian_chroot)}\[${user}\]\u\[${BLACK}\]@\[${host}\]\h\[${WHITE}\]:\[${path}\]\w\[$MAGENTA\]\[${NC}\]\$(__exit_code)\$ "
+		fi
+
 	else
-		PS1="${debian_chroot:+($debian_chroot)}\[${user}\]\u\[${BLACK}\]@\[${host}\]\h\[${WHITE}\]:\[${path}\]\w\[$MAGENTA\]\[${NC}\]\$(__exit_code)\$ "
+		# we don't have color, go plain and simple
+		PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 	fi
 
-	# set terminal title
-	PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\h: \w\a\]$PS1"
+	# If this is an xterm, set terminal title
+	case "$TERM" in
+		xterm*|rxvt*)
+			# Ubuntu default user@host: dir
+			# PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+
+			# Our style host: dir
+			PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\h: \w\a\]$PS1"
+			;;
+		*)
+			;;
+	esac
 }
 
 # Set default colors
@@ -234,8 +218,25 @@ xterm_setcolor $green $GREEN $BLUE
 # Common terminal aliases
 # ---------------------------------
 
-# show files as tree
-alias ls='ls -lh --color=auto'
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	alias ls='ls --color=auto -lh'
+	alias dir='dir --color=auto'
+	alias vdir='vdir --color=auto'
+
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 
 # clear screen
 alias cls='clear'
