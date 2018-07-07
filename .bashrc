@@ -169,6 +169,7 @@ if havecmd git; then
 			dot() {
 				git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
 			}
+			echo '*' >> .dotrepo/info/exclude
 			read -p "Press ENTER to continue ..."
 			dot config --local status.showUntrackedFiles no
 			dot status
