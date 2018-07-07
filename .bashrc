@@ -160,21 +160,21 @@ if havecmd git; then
 	# Version control dotfiles
 	if __test -d ~/.dotrepo; then
 		dot() {
-			git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME $@
+			git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
 		}
 	else
 		dotrepo() {
 			cd ~
 			git init --bare .dotrepo
 			dot() {
-				git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME $@
+				git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
 			}
 			read -p "Press ENTER to continue ..."
 			dot config --local status.showUntrackedFiles no
-			dot add ~/.bashrc
 			dot status
 			echo
 			echo "Repository set. You may want to add remote as 'dot remote add origin <url>'"
+			echo "Then pull, add and push."
 			unset dotrepo
 		}
 	fi
