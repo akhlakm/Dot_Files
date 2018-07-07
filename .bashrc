@@ -161,7 +161,11 @@ if havecmd git; then
 	# Inspired by: https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
 	if __test -d ~/.dotrepo; then
 		dot() {
-			git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
+			# use dot from anywhere
+			# git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
+
+			# use dot only from $HOME
+			git --git-dir=$HOME/.dotrepo/ "$@"
 		}
 	else
 		dotrepo() {
