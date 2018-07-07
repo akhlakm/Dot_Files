@@ -375,6 +375,7 @@ google() {
 	open "https://www.google.com/search?q=$@"
 }
 
+# usage: localhost <path> <port>
 localhost() {
 	local port=${2:-8080}
 	local path="${1:-/}"
@@ -410,20 +411,18 @@ dotsyn() {
 }
 fi
 
-# from https://github.com/helmuthdu/dotfiles/blob/master/.bashrc {{
-    # REMIND ME, ITS IMPORTANT!
-    # usage: remindme <time> <text>
-    # e.g.: remindme 10m "omg, the pizza"
-    remindme() { sleep $1 && zenity --info --text "$2" & }
-# }}
+# from https://github.com/helmuthdu/dotfiles/blob/master/.bashrc
+# REMIND ME, ITS IMPORTANT!
+# usage: remindme <time> <text>
+# e.g.: remindme 10m "omg, the pizza"
+remindme() { sleep $1 && zenity --info --text "$2" & }
 
 tellme() { sleep $1 && spd-say "$2" & }
 
-# from https://github.com/trentm/dotfiles/blob/master/home/.bashrc {{
-	# List path entries of PATH or environment variable <var>.
-	# Usage: pls [<var>]
-	pls () { eval echo \$${1:-PATH} |tr : '\n'; }
-# }}
+# from https://github.com/trentm/dotfiles/blob/master/home/.bashrc
+# List path entries of PATH or environment variable <var>.
+# Usage: pls [<var>]
+pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 
 # For some reason, rot13 pops up everywhere
 rot13 () {
