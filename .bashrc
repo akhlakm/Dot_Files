@@ -98,7 +98,7 @@ alias __test=$(which test)
 # It should be configured first.
 # ---------------------------------
 if havecmd git; then
-	source /usr/share/bash-completion/completions/git
+	__test -f /usr/share/bash-completion/completions/git && source /usr/share/bash-completion/completions/git
 
 	if [[ ! -f ~/.git-prompt.sh ]]; then
 		# download and use the official one
