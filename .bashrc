@@ -338,6 +338,7 @@ fi
 # ---------------------------------
 alias bashrc='${EDITOR} ~/.bashrc'
 alias bashaliases='${EDITOR} ~/.bash_aliases'
+if havecmd git; then alias gitconfig='${EDITOR} ~/.gitconfig'
 
 # source bashrc
 alias sourcerc='. ~/.bashrc'
