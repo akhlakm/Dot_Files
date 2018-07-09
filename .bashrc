@@ -125,10 +125,7 @@ if havecmd git; then
 	if __test -d ~/.dotrepo; then
 		dot() {
 			# use dot from anywhere
-			# git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
-
-			# use dot only from $HOME
-			git --git-dir=$HOME/.dotrepo/ "$@"
+			git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
 		}
 	else
 		dotrepo() {
@@ -329,6 +326,14 @@ else
 	}
 fi
 
+# Cheat directory
+if [[ -d ~/.cheat ]]; then
+	if ! havecmd cheat; then 
+		echo '~/.cheat directory found. Cheat not installed.'
+		echo 'Please run "pip install cheat" to install it.'
+	fi
+fi
+
 # Quick and fast
 # ---------------------------------
 alias bashrc='${EDITOR} ~/.bashrc'
@@ -479,8 +484,7 @@ fi
 if havecmd git; then
 
 cheat-git() {
-	#cat << EOF | less
-	cat << EOF
+cat << EOF
 
 git checkout -b [new-branch]
 	creates and switches to a new branch
@@ -526,3 +530,40 @@ Note
 EOF
 }
 fi
+
+cheat-bash() {
+cat << EOF
+sudo !!
+	re-run previous command with 'sudo' prepended
+less +F
+	view logfiles, instead of 'tail' (ctrl-c, shift-f, q to quit)
+ctrl x e
+	continue editing your current shell line in a text editor (uses $EDITOR)
+alt .
+	paste previous command's argument
+reset
+	resets/unborks your terminal
+CTRL L
+	Clear the terminal
+CTRL D
+	Logout (less, more)
+SHIFT Page Up/Down
+	Go up/down the terminal
+head <file>
+	read from the top
+CTRL a
+	Cursor to start of line
+CTRL e
+	Cursor the end of line
+CTRL u
+	Delete left of the cursor
+CTRL k
+	Delete right of the cursor aka. kill
+CTRL w
+	Delete word on the left
+CTRL y
+	Paste (after CTRL U,K or W) aka. yank
+CTRL r
+	reverse search history
+EOF
+}
