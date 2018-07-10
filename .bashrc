@@ -245,11 +245,10 @@ else
 	export EDITOR=vi
 fi
 
-# memory info 
+# add some humanity
 alias free='free -h'
-
-# disk use
 alias du='du -h'
+alias df='df -h'
 
 # interactive mv and cp
 alias mv='mv -i'
