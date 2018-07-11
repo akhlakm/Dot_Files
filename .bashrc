@@ -325,14 +325,6 @@ else
 	}
 fi
 
-# Cheat directory
-if [[ -d ~/.cheat ]]; then
-	if ! havecmd cheat; then 
-		echo '~/.cheat directory found. Cheat not installed.'
-		echo 'Please run "pip install cheat" to install it.'
-	fi
-fi
-
 # Quick and fast
 # ---------------------------------
 alias bashrc='${EDITOR} ~/.bashrc'
