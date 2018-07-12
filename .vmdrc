@@ -187,8 +187,13 @@ proc showAtomAtCenter {selection_criteria} {
     set center_atom "sqr(x-$x) + sqr(y-$y) + sqr(z - $z) < 5"
     
     # clear screen
-    puts "Center atom selection: '$center_atom' "
+    puts "Selection criteria: '$center_atom' "
     clearallreps top
+
+    mol selection $selection_criteria
+    mol representation lines
+    mol addrep top
+
     mol selection $center_atom
     mol representation VDW 1.000000 20.000000
     mol color Name
@@ -196,7 +201,7 @@ proc showAtomAtCenter {selection_criteria} {
 
     set sel [atomselect top $center_atom]
     set ids [$sel get index]
-    puts "Atom indices: $ids"
+    puts "Selected atoms: $ids"
 }
 
 proc nucleicrdf {} {
