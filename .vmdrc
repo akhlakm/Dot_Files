@@ -80,7 +80,7 @@ display resize 1040 900
 
 proc con {} {
     menu tkcon on
-    menu tkcon move 930 125
+    menu tkcon move 930 725
     tkcon font Helvetica -14
 }
 
