@@ -61,7 +61,6 @@ menu color    move 125  225
 menu files    move 425  825
 menu labels   move 125  525
 menu render   move 125  525
-menu tkcon    move 930 125
 
 menu main      on
 # menu display  on
@@ -70,7 +69,9 @@ menu graphics on
 #menu labels   on
 #menu render   on
 menu files    on
-menu tkcon    on
+
+# menu tkcon    on
+# menu tkcon    move 930 125
 
 global env 
 # set env(VMDFULLSCREEN) 1 
