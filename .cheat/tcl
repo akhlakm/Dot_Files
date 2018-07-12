@@ -1,0 +1,27 @@
+```tcl
+
+# bracket vs qutoes
+puts "\n substitution ok"
+puts {disable substitution}
+
+# atomselect
+set sel [atomselect top 'x $x and y $y']
+
+# com
+set com [measure center $sel]
+
+# list indexing
+set x [lindex $com 0]
+set y [lindex $com 1]
+set z [lindex $com 2]
+
+# setting multiple items
+$sel set {occupancy mass beta} $com
+
+# splitting
+split $com " "
+
+# execute shell command
+exec sh -c "echo \$(pwd)"
+
+```
