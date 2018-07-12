@@ -70,8 +70,6 @@ menu graphics on
 #menu render   on
 menu files    on
 
-# menu tkcon    on
-# menu tkcon    move 930 125
 
 global env 
 # set env(VMDFULLSCREEN) 1 
@@ -79,6 +77,12 @@ display resize 1040 900
 # start the scene a-rockin'
 # rock y by 1
 #take_picture reset
+
+proc con {} {
+    menu tkcon on
+    menu tkcon move 930 125
+    tkcon font Helvetica -14
+}
 
 ### Configuration for recording screenshots and movies with AO
 user add key p {
