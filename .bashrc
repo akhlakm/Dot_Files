@@ -307,6 +307,11 @@ alias d='dirs -v'
 alias b='pushd +1'
 alias p='pwd'
 
+# cheat
+if [[ "$color_prompt" = yes && -d ~/.cheat ]]; then
+	export CHEATCOLORS=yes
+fi
+
 # Working Directory
 # https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
