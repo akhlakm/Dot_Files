@@ -269,7 +269,7 @@ alias dus="du --max-depth=1 | sort -nr"
 alias gh='history | grep '
 
 # Copy with a progress bar
-alias rsync="rsync -avh --progress"
+alias rsync="rsync -avh --progress --bwlimit=10000"
 
 # Navigation helpers
 # ---------------------------------

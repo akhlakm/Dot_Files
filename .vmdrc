@@ -204,6 +204,14 @@ proc showAtomAtCenter {selection_criteria} {
     puts "Selected atoms: $ids"
 }
 
+proc boxsize {} {
+    set box [measure minmax [atomselect top all]]
+    set rgyr [measure rgyr [atomselect top all]]
+
+    puts "Box Size: $box"
+    puts "Radius of gyration: $rgyr"
+}
+
 proc nucleicrdf {} {
 	set center [ geom_center [atomselect {type Au}]]
 	set mask2 [atomselect top "name OP1"]
