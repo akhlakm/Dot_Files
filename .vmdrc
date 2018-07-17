@@ -212,6 +212,11 @@ proc boxsize {} {
     puts "Radius of gyration: $rgyr"
 }
 
+proc pbcbox {bs} {
+    pbc set "$bs $bs $bs" -all -molid top
+    pbc box
+}
+
 proc nucleicrdf {} {
 	set center [ geom_center [atomselect {type Au}]]
 	set mask2 [atomselect top "name OP1"]
@@ -262,6 +267,31 @@ user add key v {
     
  
  }
+
+# To view gold NP with OLM ligands
+user add key g {
+    clearallreps top
+
+    # Gold Atoms
+    mol selection $gold_atoms
+    mol representation VDW 1.000000 15.000000
+    mol color ColorID 32
+    mol material EdgyGlass
+    mol addrep top
+
+    # Oleylamine ligands
+    mol selection "resname OAB"
+    mol representation lines 5.000
+    mol color ColorID 6
+    mol material Steel
+    mol addrep top
+
+    # Solvents
+    mol selection "not type Au and not resname OAB"
+    mol representation lines 1.000
+    mol color Type
+    mol addrep top
+}
 
 user add key b {
 # Nanoparticle-nucleic with AO rendering (for use with Tachyon-OSprey engine)
