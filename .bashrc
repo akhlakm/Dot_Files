@@ -314,8 +314,8 @@ alias p='pwd'
 # Working Directory
 # https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
-	export WDHOME=$HOME/.wd
-	source $WDHOME/wd.sh
+	export WDHOME="$HOME/.wd"
+	source "$WDHOME/wd.sh"
 else
 	# You may want to install working-directory by running 'installwd'
 	installwd() {
@@ -323,8 +323,8 @@ else
 		git clone https://github.com/karlin/working-directory.git &&\
 		cd working-directory &&\
 		./install.sh
-		export WDHOME=$HOME/.wd
-		source $WDHOME/wd.sh &&\
+		export WDHOME="$HOME/.wd"
+		source "$WDHOME/wd.sh" &&\
 		unset installwd
 	}
 fi
