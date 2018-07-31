@@ -125,7 +125,7 @@ if havecmd git; then
 	if __test -d ~/.dotrepo; then
 		dot() {
 			# use dot from anywhere
-			git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
+			git --git-dir="$HOME/.dotrepo/" --work-tree="$HOME" "$@"
 		}
 	else
 		dotrepo() {
@@ -133,7 +133,7 @@ if havecmd git; then
 			git init --bare .dotrepo
 			read -p "Press ENTER to continue ..."
 			dot() {
-				git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
+				git --git-dir="$HOME/.dotrepo/" --work-tree="$HOME" "$@"
 			}
 			# we are excluding everything, you have to force add to repo
 			# use 'dot add -f <file>'
