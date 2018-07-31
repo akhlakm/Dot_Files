@@ -103,7 +103,11 @@ if havecmd git; then
 	if [[ ! -f ~/.git-prompt.sh ]]; then
 		# download and use the official one
 		echo "Downloading git-prompt ..."
-		wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh &&\
+		if havecmd wget; then
+			wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+		elif havecmd curl; then
+			curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > ~/.git-prompt.sh
+		fi
 		source ~/.git-prompt.sh && echo "git-prompt loaded."
 	else
 		source ~/.git-prompt.sh
