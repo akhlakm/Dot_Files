@@ -165,7 +165,7 @@ __exit_code() {
 	if [[ exit_code -eq 0 ]]; then
 		echo ''
 	else
-		echo -e " ${red}?${exit_code}${NC}"
+		echo -e " ${RED}?${exit_code}${NC}"
 	fi
 }
 
