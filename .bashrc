@@ -1,3 +1,8 @@
+# Custom .bashrc
+# Author: Akhlak Mahmood <mahmoodakhlak at gmail dot com>
+# Version: 2018.2
+# ------------------------------------------------------------------------
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -63,7 +68,7 @@ unset force_color_prompt
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# some stuff we will need later on
+# Some stuff we will need later on
 # ---------------------------------
 
 # Define Colors {{
@@ -132,6 +137,7 @@ if havecmd git; then
 			git --git-dir="$HOME/.dotrepo/" --work-tree="$HOME" "$@"
 		}
 	else
+		# call 'dotrepo' to setup dot to version control dot files
 		dotrepo() {
 			cd ~
 			git init --bare .dotrepo
@@ -152,7 +158,7 @@ if havecmd git; then
 	fi
 
 else
-	echo "Git not installed. Please consider installing it."
+	echo "Git not found. Please consider installing it."
 fi
 
 # Terminal title and prompt
@@ -272,7 +278,7 @@ alias dus="du --max-depth=1 | sort -nr"
 # !N where N is the command number in history
 alias gh='history | grep '
 
-# Copy with a progress bar
+# Copy with a progress bar, limit speed to 30mbps
 alias rsync="rsync -avh --progress --bwlimit=30000"
 
 # Navigation helpers
@@ -312,6 +318,7 @@ alias b='pushd +1'
 alias p='pwd'
 
 # Working Directory
+# -------------------------------------------
 # https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
 	export WDHOME="$HOME/.wd"
@@ -321,11 +328,15 @@ else
 	installwd() {
 		cd /tmp &&\
 		git clone https://github.com/karlin/working-directory.git &&\
-		cd working-directory &&\
-		./install.sh
+		cd working-directory
+
+		# ./install.sh
+		mkdir -p "$HOME/.wd/"
+		cp -i ./wd/* "$HOME/.wd/"
+		cp ./README "$HOME/.wd/"
+
 		export WDHOME="$HOME/.wd"
-		source "$WDHOME/wd.sh" &&\
-		unset installwd
+		source "$WDHOME/wd.sh" && unset installwd
 	}
 fi
 
@@ -336,7 +347,7 @@ alias bashaliases='${EDITOR} ~/.bash_aliases'
 if havecmd git; then alias gitconfig='${EDITOR} ~/.gitconfig'; fi
 
 # source bashrc
-alias sourcerc='. ~/.bashrc'
+alias src='. ~/.bashrc'
 
 # frequently used cd
 alias cddl='cd ~/Downloads'
@@ -355,19 +366,17 @@ if havecmd vmd; then alias vmdrc='${EDITOR} ~/.vmdrc'; fi
 
 if havecmd google-chrome; then alias chrome='google-chrome'; fi
 
-alias gimp='flatpak run org.gimp.GIMP'
-
 # Useful tools
 # ---------------------------------
 
 # Open nautilus here or somewhere
 here() {
-	local path
+	local path="${1:-$(pwd)}"
+
 	if havecmd nautilus; then
-		path="${1:-$(pwd)}"
 		nautilus "$path" &
 	elif havecmd explorer; then
-		path="${1:-$(pwd)}"
+		# cygwin or git-bash
 		explorer "$path" &		
 	fi
 }
@@ -380,6 +389,7 @@ function open () {
 	if havecmd xdg-open; then
 		xdg-open "$@">/dev/null 2>&1
 	elif havecmd start; then
+		# cygwin or git-bash
 		start "$@">/dev/null 2>&1
 	fi
 }
