@@ -366,6 +366,9 @@ here() {
 	if havecmd nautilus; then
 		path="${1:-$(pwd)}"
 		nautilus "$path" &
+	elif havecmd explorer; then
+		path="${1:-$(pwd)}"
+		explorer "$path" &		
 	fi
 }
 
@@ -374,7 +377,11 @@ alias term="gnome-terminal --working-directory"
 
 # open file with default application
 function open () {
-  xdg-open "$@">/dev/null 2>&1
+	if havecmd xdg-open; then
+		xdg-open "$@">/dev/null 2>&1
+	elif havecmd start; then
+		start "$@">/dev/null 2>&1
+	fi
 }
 
 # Quick google search
