@@ -1,3 +1,8 @@
+# Custom .bashrc
+# Author: Akhlak Mahmood <mahmoodakhlak at gmail dot com>
+# Version: 2018.2
+# ------------------------------------------------------------------------
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -37,7 +42,7 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-	xterm-color|*-256color) color_prompt=yes;;
+	xterm-color|*-256color|cygwin) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -63,7 +68,7 @@ unset force_color_prompt
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# some stuff we will need later on
+# Some stuff we will need later on
 # ---------------------------------
 
 # Define Colors {{
@@ -103,7 +108,11 @@ if havecmd git; then
 	if [[ ! -f ~/.git-prompt.sh ]]; then
 		# download and use the official one
 		echo "Downloading git-prompt ..."
-		wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh &&\
+		if havecmd wget; then
+			wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+		elif havecmd curl; then
+			curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > ~/.git-prompt.sh
+		fi
 		source ~/.git-prompt.sh && echo "git-prompt loaded."
 	else
 		source ~/.git-prompt.sh
@@ -125,15 +134,16 @@ if havecmd git; then
 	if __test -d ~/.dotrepo; then
 		dot() {
 			# use dot from anywhere
-			git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
+			git --git-dir="$HOME/.dotrepo/" --work-tree="$HOME" "$@"
 		}
 	else
+		# call 'dotrepo' to setup dot to version control dot files
 		dotrepo() {
 			cd ~
 			git init --bare .dotrepo
 			read -p "Press ENTER to continue ..."
 			dot() {
-				git --git-dir=$HOME/.dotrepo/ --work-tree=$HOME "$@"
+				git --git-dir="$HOME/.dotrepo/" --work-tree="$HOME" "$@"
 			}
 			# we are excluding everything, you have to force add to repo
 			# use 'dot add -f <file>'
@@ -148,7 +158,7 @@ if havecmd git; then
 	fi
 
 else
-	echo "Git not installed. Please consider installing it."
+	echo "Git not found. Please consider installing it."
 fi
 
 # Terminal title and prompt
@@ -161,7 +171,7 @@ __exit_code() {
 	if [[ exit_code -eq 0 ]]; then
 		echo ''
 	else
-		echo -e " ${red}?${exit_code}${NC}"
+		echo -e " ${RED}?${exit_code}${NC}"
 	fi
 }
 
@@ -268,8 +278,8 @@ alias dus="du --max-depth=1 | sort -nr"
 # !N where N is the command number in history
 alias gh='history | grep '
 
-# Copy with a progress bar
-alias rsync="rsync -avh --progress"
+# Copy with a progress bar, limit speed to 30mbps
+alias rsync="rsync -avh --progress --bwlimit=30000"
 
 # Navigation helpers
 # ---------------------------------
@@ -313,20 +323,25 @@ if [[ "$color_prompt" = yes && -d ~/.cheat ]]; then
 fi
 
 # Working Directory
+# -------------------------------------------
 # https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
-	export WDHOME=$HOME/.wd
-	source $WDHOME/wd.sh
+	export WDHOME="$HOME/.wd"
+	source "$WDHOME/wd.sh"
 else
 	# You may want to install working-directory by running 'installwd'
 	installwd() {
 		cd /tmp &&\
 		git clone https://github.com/karlin/working-directory.git &&\
-		cd working-directory &&\
-		./install.sh
-		export WDHOME=$HOME/.wd
-		source $WDHOME/wd.sh &&\
-		unset installwd
+		cd working-directory
+
+		# ./install.sh
+		mkdir -p "$HOME/.wd/"
+		cp -i ./wd/* "$HOME/.wd/"
+		cp ./README "$HOME/.wd/"
+
+		export WDHOME="$HOME/.wd"
+		source "$WDHOME/wd.sh" && unset installwd
 	}
 fi
 
@@ -337,7 +352,7 @@ alias bashaliases='${EDITOR} ~/.bash_aliases'
 if havecmd git; then alias gitconfig='${EDITOR} ~/.gitconfig'; fi
 
 # source bashrc
-alias sourcerc='. ~/.bashrc'
+alias src='. ~/.bashrc'
 
 # frequently used cd
 alias cddl='cd ~/Downloads'
@@ -356,17 +371,18 @@ if havecmd vmd; then alias vmdrc='${EDITOR} ~/.vmdrc'; fi
 
 if havecmd google-chrome; then alias chrome='google-chrome'; fi
 
-alias gimp='flatpak run org.gimp.GIMP'
-
 # Useful tools
 # ---------------------------------
 
 # Open nautilus here or somewhere
 here() {
-	local path
+	local path="${1:-$(pwd)}"
+
 	if havecmd nautilus; then
-		path="${1:-$(pwd)}"
 		nautilus "$path" &
+	elif havecmd explorer; then
+		# cygwin or git-bash
+		explorer "$path" &		
 	fi
 }
 
@@ -375,7 +391,12 @@ alias term="gnome-terminal --working-directory"
 
 # open file with default application
 function open () {
-  xdg-open "$@">/dev/null 2>&1
+	if havecmd xdg-open; then
+		xdg-open "$@">/dev/null 2>&1
+	elif havecmd start; then
+		# cygwin or git-bash
+		start "$@">/dev/null 2>&1
+	fi
 }
 
 # Quick google search
@@ -473,94 +494,3 @@ if ! shopt -oq posix; then
 	. /etc/bash_completion
   fi
 fi
-
-
-# Displays a git cheatsheet
-# Useful for noobs like me
-# @Todo: this can not be the right place for this function? Or is it? ;)
-if havecmd git; then
-
-cheat-git() {
-cat << EOF
-
-git checkout -b [new-branch]
-	creates and switches to a new branch
-
-git checkout -b [new-branch] [object]
-	creates and switches to a new branch based on an existing object
-
-	[object] = [branch-name] or [commit-sha]
-
-git checkout [object]
-	checks out the state of the repository at a particular object
-
-git show [object]
-	show commited changes of the object
-	default object is current working directory/branch
-
-git push -u origin my_branch
-	specify -u to create track remote branch
-	this sets the remote upstream, so only need to specify once
-
-git branch
-
-git branch -a
-	to show remote branches too
-
-git fetch
-	get the latest information about the branches on the default remote
-
-git fetch [remote]
-	get the latest information about the branches on the named remote
-
-git merge [branch]
-	merges the named branch into the working directory/branch
-
-git merge [remote/branch] -m "[message]"
-	merges the branch referred to into the working directory
-	fetch the remote before the merge
-
-Note
-	fetch followed by merge is often safer than pull
-	don’t assume that pull will do what you expect it to
-
-EOF
-}
-fi
-
-cheat-bash() {
-cat << EOF
-sudo !!
-	re-run previous command with 'sudo' prepended
-less +F
-	view logfiles, instead of 'tail' (ctrl-c, shift-f, q to quit)
-ctrl x e
-	continue editing your current shell line in a text editor (uses $EDITOR)
-alt .
-	paste previous command's argument
-reset
-	resets/unborks your terminal
-CTRL L
-	Clear the terminal
-CTRL D
-	Logout (less, more)
-SHIFT Page Up/Down
-	Go up/down the terminal
-head <file>
-	read from the top
-CTRL a
-	Cursor to start of line
-CTRL e
-	Cursor the end of line
-CTRL u
-	Delete left of the cursor
-CTRL k
-	Delete right of the cursor aka. kill
-CTRL w
-	Delete word on the left
-CTRL y
-	Paste (after CTRL U,K or W) aka. yank
-CTRL r
-	reverse search history
-EOF
-}
