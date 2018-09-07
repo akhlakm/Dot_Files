@@ -85,7 +85,7 @@ proc con {} {
 }
 
 ### Configuration for recording screenshots and movies with AO
-user add key p {
+user add key q {
 light 0 on
 light 1 on
 light 2 on
