@@ -129,6 +129,9 @@ if havecmd git; then
 	# ex: git checkout -b new-branch based-on-this-old-branch
 	alias gitnb='git checkout -b'
 
+	# checkout from stash[0]
+	alias gitcs='git checkout "stash@{0}" --'
+
 	# Version control dotfiles
 	# Inspired by: https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
 	if __test -d ~/.dotrepo; then
