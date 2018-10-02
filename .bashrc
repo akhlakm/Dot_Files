@@ -217,6 +217,9 @@ xterm_setcolor() {
 		*)
 			;;
 	esac
+
+	# BugFix: command overwrites itself
+	shopt -s checkwinsize
 }
 
 # Set default colors
