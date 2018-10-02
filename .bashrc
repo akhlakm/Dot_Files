@@ -98,13 +98,10 @@ havecmd() { type "$1" &> /dev/null; }
 # the `test` may get overwritten
 alias __test=$(which test)
 
-# Git helpers
-# Some later items depend on it.
-# It should be configured first.
-# ---------------------------------
-if havecmd git; then
-	__test -f /usr/share/bash-completion/completions/git && source /usr/share/bash-completion/completions/git
-
+# Allows you to see repository status in your prompt.
+# Helper function to install it.
+# ------------------------------
+git_prompt() {
 	if [[ ! -f ~/.git-prompt.sh ]]; then
 		# download and use the official one
 		echo "Downloading git-prompt ..."
@@ -113,9 +110,24 @@ if havecmd git; then
 		elif havecmd curl; then
 			curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > ~/.git-prompt.sh
 		fi
-		source ~/.git-prompt.sh && echo "git-prompt loaded."
+	fi
+	source ~/.git-prompt.sh && echo "git-prompt loaded."
+	unset git_prompt
+}
+
+# Git helpers
+# Some later items depend on it.
+# It should be configured first.
+# ---------------------------------
+if havecmd git; then
+	__test -f /usr/share/bash-completion/completions/git && source /usr/share/bash-completion/completions/git
+
+	if [[ ! -f ~/.git-prompt.sh ]]; then
+		echo "git-prompt not found. It allows you to see repository status in your prompt."
+		echo "Please run 'git_prompt' to download and install it."
 	else
 		source ~/.git-prompt.sh
+		unset git_prompt
 	fi
 
 	# show all the files in current git repo
@@ -167,7 +179,7 @@ fi
 # Terminal title and prompt
 # ---------------------------------
 
-# Prints the latest not zero exit code
+# Prints the latest non-zero exit code
 # inspired by https://github.com/slomkowski/bash-full-of-colors
 __exit_code() {
 	local exit_code=$?
@@ -221,7 +233,7 @@ xterm_setcolor() {
 			;;
 	esac
 
-	# BugFix: command overwrites itself
+	# BugFix: command overwrites prompt
 	shopt -s checkwinsize
 }
 
@@ -329,6 +341,8 @@ if [[ "$color_prompt" = yes && -d ~/.cheat ]]; then
 fi
 
 # Working Directory
+# A simple set of aliases and functions that allows
+# named storage and quick retrieval of directories.
 # -------------------------------------------
 # https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
@@ -351,7 +365,7 @@ else
 	}
 fi
 
-# Quick and fast
+# Quick and fast access
 # ---------------------------------
 alias bashrc='${EDITOR} ~/.bashrc'
 alias bashaliases='${EDITOR} ~/.bash_aliases'
@@ -432,8 +446,7 @@ swap() {
 }
 
 # Helper function to quickly sync bashrc using Dropbox.
-# You may override this function in ~/.bash_aliases
-# to include other dot files.
+# You may override this function in ~/.bash_aliases to include other dot files.
 # Consider using dotrepo() to version control dotfiles.
 if __test -d ~/Dropbox; then
 dotsyn() {
@@ -481,7 +494,7 @@ else
 	cat << EOF > ~/.bash_aliases
 # ~/.bash_aliases for ${USER}@${HOSTNAME}
 # This file should contain everything that is only specific to 
-# this computer (path, variable, color etc.).
+# this computer (path, variable, alias, color etc.).
 # Any sharable configuration should go into ~/.bashrc
 
 # xterm_setcolor $green $RED
