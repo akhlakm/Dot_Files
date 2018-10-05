@@ -132,6 +132,7 @@ if havecmd git; then
 
 	# show all the files in current git repo
 	alias gittree='git ls-tree --full-tree -r HEAD'
+	alias gits='git status'
 
 	# git oneliner log
 	alias gitol='git log --oneline -n'
