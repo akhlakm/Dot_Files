@@ -345,7 +345,7 @@ fi
 # A simple set of aliases and functions that allows
 # named storage and quick retrieval of directories.
 # -------------------------------------------
-# https://github.com/karlin/working-directory
+# Origingal: https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
 	export WDHOME="$HOME/.wd"
 	source "$WDHOME/wd.sh"
@@ -353,7 +353,7 @@ else
 	# You may want to install working-directory by running 'installwd'
 	installwd() {
 		cd /tmp &&\
-		git clone https://github.com/karlin/working-directory.git &&\
+		git clone https://github.com/akhlak-mahmood/working-directory.git &&\
 		cd working-directory
 
 		# ./install.sh
