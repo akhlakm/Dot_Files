@@ -298,7 +298,7 @@ alias dus="du --max-depth=1 | sort -nr"
 alias gh='history | grep'
 
 # grep running processes
-alias ph='ps aux | grep'
+alias pg='ps aux | grep'
 
 # Copy with a progress bar, limit speed to 30mbps
 alias rsync="rsync -avh --progress --bwlimit=30000"
@@ -434,6 +434,22 @@ localhost() {
 	local port=${2:-8000}
 	local path="${1:-/}"
 	open "http://localhost:${port}${path}"
+}
+
+
+# make a bash script named 'readME'
+makereadME() {
+	cat << END > readME
+#!/usr/bin/env bash
+
+cat << EOF
+	Nothing here.
+EOF
+
+END
+
+	chmod +x readME
+
 }
 
 # Swap two files.
