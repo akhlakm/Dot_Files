@@ -436,6 +436,22 @@ localhost() {
 	open "http://localhost:${port}${path}"
 }
 
+
+# make a bash script named 'readME'
+makereadME() {
+	cat << END > readME
+#!/usr/bin/env bash
+
+cat << EOF
+	Nothing here.
+EOF
+
+END
+
+	chmod +x readME
+
+}
+
 # Swap two files.
 # If the second file doesn't exist, empty one is created for it.
 # Be careful, both files will exist, only contents are exchaned.

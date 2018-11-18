@@ -407,6 +407,37 @@ user add key s {
     mol addrep top
 }
 
+user add key f {
+    clearallreps top 
+
+    # grey bonds
+    mol selection {all and not (index 46 or index 62 or index 30)}
+    mol representation CPK 1.300000 0.300000 12.000000 12.000000
+    mol color ColorID 2
+    mol material Opaque
+    mol addrep top
+
+    # Fe1
+    mol selection {name Fe1 and not (index 46 or index 62 or index 30)}
+    mol representation CPK 1.500000 0.300000 20.000000 12.000000
+    mol color ColorID 1
+    mol material Opaque
+    mol addrep top
+
+    mol representation CPK 1.500000 0.300000 20.000000 12.000000
+    mol color ColorID 20
+    mol selection {name Fe2 and not (index 46 or index 62)}
+    mol material Opaque
+    mol addrep top
+
+    mol selection {name O1 and not (index 46 or index 62)}
+    mol representation CPK 1.500000 0.300000 20.000000 12.000000
+    mol color ColorID 0
+    mol material Opaque
+    mol addrep top
+
+}
+
 # *** Visualize DNA with backbone and visible nucleobases
 user add key w {
     #Apply preselected graphical representation
