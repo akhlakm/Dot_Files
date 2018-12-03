@@ -132,7 +132,17 @@ if havecmd git; then
 
 	# show all the files in current git repo
 	alias gittree='git ls-tree --full-tree -r HEAD'
+
+	# shortcuts for frequently used commands
 	alias gits='git status'
+	gitac() {
+		git add -u
+		git status
+		local msg="${1:-AutoSave}"
+		echo
+		read -e -i "$msg" -p "Commit Message: " msg
+		git commit -m "${msg}"
+	}
 
 	# git oneliner log
 	alias gitol='git log --oneline -n'
@@ -439,11 +449,12 @@ localhost() {
 
 # make a bash script named 'readME'
 makereadME() {
+	local content="${1:-Nothing Here.}"
 	cat << END > readME
 #!/usr/bin/env bash
 
 cat << EOF
-	Nothing here.
+	${content}
 EOF
 
 END

@@ -68,7 +68,7 @@ menu graphics on
 #menu color    on
 #menu labels   on
 #menu render   on
-menu files    on
+menu files    off
 
 
 global env 
@@ -202,6 +202,10 @@ proc showAtomAtCenter {selection_criteria} {
     set sel [atomselect top $center_atom]
     set ids [$sel get index]
     puts "Selected atoms: $ids"
+}
+
+proc get_total_charge {sel} {
+    return [eval "vecadd [$sel get charge]"]
 }
 
 proc boxsize {} {
@@ -411,14 +415,14 @@ user add key f {
     clearallreps top 
 
     # grey bonds
-    mol selection {all and not (index 46 or index 62 or index 30)}
+    mol selection {all}
     mol representation CPK 1.300000 0.300000 12.000000 12.000000
     mol color ColorID 2
     mol material Opaque
     mol addrep top
 
     # Fe1
-    mol selection {name Fe1 and not (index 46 or index 62 or index 30)}
+    mol selection {name F1}
     mol representation CPK 1.500000 0.300000 20.000000 12.000000
     mol color ColorID 1
     mol material Opaque
@@ -426,11 +430,11 @@ user add key f {
 
     mol representation CPK 1.500000 0.300000 20.000000 12.000000
     mol color ColorID 20
-    mol selection {name Fe2 and not (index 46 or index 62)}
+    mol selection {name F2}
     mol material Opaque
     mol addrep top
 
-    mol selection {name O1 and not (index 46 or index 62)}
+    mol selection {name O1}
     mol representation CPK 1.500000 0.300000 20.000000 12.000000
     mol color ColorID 0
     mol material Opaque
