@@ -438,34 +438,19 @@ user add key f {
 
 }
 
-# *** Visualize DNA with backbone and visible nucleobases
 user add key w {
-    #Apply preselected graphical representation
-#     set viewplist {}
-#     set fixedlist {}
-	clearallreps top
-    mol selection {fragment 0}
-    mol representation NewRibbons 2.05 10 1.06 1
-    mol color ColorID 3
-    mol material BrushedMetal
-    mol addrep top
-    
-    mol selection {fragment 1}
-    mol representation NewRibbons 2.05 10 1.06 1
-    mol color ColorID 20
-    mol material BrushedMetal
+    clearallreps top 
+
+    mol selection {resname Olm}
+    mol representation CPK 0.9 0.9 12 12
+    mol color name
+    mol material Opaque
     mol addrep top
 
-    mol selection {fragment 0 and nucleic not backbone and not name "H.*"}
-    mol representation Licorice 0.3 10.0 10.0
-    mol color ColorID 3
-    mol material Translucent
-    mol addrep top
-
-    mol selection {fragment 1 and nucleic not backbone and not name "H.*"}
-    mol representation Licorice 0.3 10.0 10.0
-    mol color ColorID 20
-    mol material Translucent
+    mol selection {all}
+    mol representation Lines 1
+    mol color Charge
+    mol material Opaque
     mol addrep top
 }
 
