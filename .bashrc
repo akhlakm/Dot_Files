@@ -297,7 +297,7 @@ alias cp='cp -i'
 # for some reason I always mess up mv with rm
 # so here is this override of rm
 alias rm="echo 'Please use remove instead to delete'"
-alias remove="/bin/rm -I"
+alias remove="/bin/rm -i"
 
 # text to speak
 # example 'say "ding dong"'
