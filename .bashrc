@@ -292,7 +292,12 @@ alias df='df -h'
 # interactive mv and cp
 alias mv='mv -i'
 alias cp='cp -i'
-alias rm='rm -I'
+
+# alias rm='rm -I'
+# for some reason I always mess up mv with rm
+# so here is this override of rm
+alias rm="echo 'Please use remove instead to delete'"
+alias remove="/bin/rm -i"
 
 # text to speak
 # example 'say "ding dong"'
@@ -358,7 +363,7 @@ fi
 # A simple set of aliases and functions that allows
 # named storage and quick retrieval of directories.
 # -------------------------------------------
-# Origingal: https://github.com/karlin/working-directory
+# Original: https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
 	export WDHOME="$HOME/.wd"
 	source "$WDHOME/wd.sh"
@@ -460,7 +465,15 @@ EOF
 END
 
 	chmod +x readME
+}
 
+readme() {
+	local name=$(find . -maxdepth 1 -iname *readme*)
+	if [[ -n $name ]]; then
+		echo 'No README found. Supply an argument to create a readme with that.'
+	else
+		cat $name 
+	fi
 }
 
 # Swap two files.
