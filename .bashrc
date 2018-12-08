@@ -296,8 +296,8 @@ alias cp='cp -i'
 # alias rm='rm -I'
 # for some reason I always mess up mv with rm
 # so here is this override of rm
-alias rm="echo 'Please use remove instead to delete'"
-alias remove="/bin/rm -i"
+alias rm="echo 'Please use remove to delete'"
+alias remove="/bin/rm -I"
 
 # text to speak
 # example 'say "ding dong"'
@@ -313,7 +313,7 @@ alias dus="du --max-depth=1 | sort -nr"
 alias gh='history | grep'
 
 # grep running processes
-alias pg='ps aux | grep'
+alias gp='ps aux | grep'
 
 # Copy with a progress bar, limit speed to 30mbps
 alias rsync="rsync -avh --progress --bwlimit=30000"
@@ -362,7 +362,7 @@ fi
 # Working Directory
 # A simple set of aliases and functions that allows
 # named storage and quick retrieval of directories.
-# -------------------------------------------
+# --------------------------------------------------
 # Original: https://github.com/karlin/working-directory
 if [[ -d ~/.wd ]]; then
 	export WDHOME="$HOME/.wd"
@@ -470,7 +470,7 @@ END
 readme() {
 	local name=$(find . -maxdepth 1 -iname *readme*)
 	if [[ -n $name ]]; then
-		echo 'No README found. Supply an argument to create a readme with that.'
+		echo 'No README found.'
 	else
 		cat $name 
 	fi
