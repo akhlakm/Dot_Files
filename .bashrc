@@ -528,7 +528,7 @@ rot13 () {
 
 # do math
 math() {
-	echo "$*" | bc
+	echo "scale=4;$*" | bc
 }
 
 # END OF BASHRC DEFINITIONS
