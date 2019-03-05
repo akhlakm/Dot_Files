@@ -51,7 +51,7 @@ display depthcue off
 display antialias on
 display ambientocclusion off
 # position the stage and axes
-axes location off
+axes location lowerleft
 stage location off
 # position and turn on menus
 menu main     move 445 125
@@ -72,7 +72,7 @@ menu files    off
 
 
 global env 
-# set env(VMDFULLSCREEN) 1 
+set env(VMDFULLSCREEN) 1 
 display resize 1040 900
 # start the scene a-rockin'
 # rock y by 1
@@ -217,7 +217,7 @@ proc boxsize {} {
 }
 
 proc pbcbox {bs} {
-    pbc set "$bs $bs $bs" -all -molid top
+    pbc set "$bs" -all -molid top
     pbc box
 }
 
@@ -304,97 +304,10 @@ user add key g {
 }
 
 user add key b {
-# Nanoparticle-nucleic with AO rendering (for use with Tachyon-OSprey engine)
-#     set viewplist {}
-#     set fixedlist {}
-	set spline_style 1
-
 	clearallreps top
-	draw delete all
-	
-    ### Gold Atoms
-    mol selection $gold_atoms
-    mol representation VDW 1.000000 15.000000
-    mol color ColorID 32
-    mol material AOGold
-    mol addrep top
-    
-    # Sulfur
-    mol selection $sulfur_atoms
-    mol representation CPK 1.50 1.2000000 50 25
-    mol color ColorID 6
-    mol material AOShiny
-    mol addrep top
-    
-    # Nitrogen atoms
-    mol selection $ammonium
-    mol representation CPK 3.5 1.2000000 50 25
-    mol color ColorID 23
-    mol material AOEnd
-    mol addrep top
-       
-    mol selection $terminal_alcohol
-    mol representation CPK 3.5 1.2000000 50 25
-    mol color ColorID 1
-    mol material AOEnd
-    mol addrep top
-    
-	# Oxygen in PEG backbone
-    mol selection {type os}
-    mol representation CPK 1.0 1.2000000 50 25
-    mol color ColorID 1
-    mol material AOEnd
-    mol addrep top
-    
-    mol selection $ligand_backbone
-    mol representation Licorice 0.150000 50.000000 50.000000
-    mol color ColorID 2
-    mol material Translucent
-    mol addrep top    
-    
-	mol selection {type ho}
-    mol representation CPK 2.0 0.0 50 25
-    mol color ColorID 8
-    mol material AOEnd
-    mol addrep top
-           
-    # Nucleic acids
-    mol selection $nucleobases
-    mol representation Licorice 0.300000 50.000000 50.000000
-    mol color ColorID 6
-    mol material AOShiny
-    mol addrep top    
 
-    mol selection $nucleobases    
-    mol representation NewRibbons 0.10 50 1.06 $spline_style
-    mol color ColorID 6
-    mol material AOShiny
+    mol selection "not (resname EtO or resname Hx1 or resname MeO)"
     mol addrep top
-    
-    # Highlight backbone in contact with ligands.
-	mol selection $nucleic_back_not_near
-	mol representation NewRibbons 2.05 10 1.06 $spline_style
-    mol color ColorID 6
-    mol material AOEdgy
-    mol addrep top
-	mol selupdate 9 top 1
-	mol colupdate 9 top 1
-	
-    mol selection $nucleic_back_near
-    mol representation NewRibbons 2.05 50 1.06 $spline_style
-    mol color ColorID 30
-    mol material AOEdgy
-    mol addrep top
-	mol selupdate 10 top 1
-	mol colupdate 10 top 1
-		
-	# Terminal Methyls
-    mol selection {name C99}
-    mol representation CPK 3.5 1.2000000 50 25
-    mol color ColorID 8
-    mol material AOEnd
-    mol addrep top
-    
 }
 
 
@@ -445,118 +358,71 @@ user add key f {
 user add key w {
     clearallreps top 
 
-    mol selection {resname Olm}
-    mol representation CPK 0.9 0.9 12 12
-    mol color name
-    mol material Opaque
-    mol addrep top
-
-    mol selection {all}
-    mol representation Lines 1
-    mol color Charge
-    mol material Opaque
-    mol addrep top
+	mol representation Lines 1.000000
+	mol color Name
+	mol selection {all}
+	mol material Opaque
+	mol addrep top
 }
 
 
 user add key o {
-# Nanoparticle-Nucleic for opaque, non-AO rendering (ie. viewing and snapshot)
-#     set viewplist {}
-#     set fixedlist {}
-	set spline_style 1
 
-	clearallreps top
-	draw delete all
-	
-    ### Gold Atoms
-    mol selection $gold_atoms
-    mol representation VDW 1.000000 15.000000
-    mol color ColorID 32
-    mol material Edgy
-    mol addrep top
-    
-    # Sulfur
-    mol selection $sulfur_atoms
-    mol representation CPK 1.50 1.2000000 50 25
-    mol color ColorID 6
-    mol material EdgyShiny
-    mol addrep top
-    
-    # Nitrogen atoms
-    mol selection $ammonium
-    mol representation CPK 3.5 1.2000000 50 25
-    mol color ColorID 23
-    mol material EdgyShiny
-    mol addrep top
- 
-	# Terminal methyl group
-    mol selection {name C1}
-    mol representation CPK 3.5 1.2000000 50 25
-    mol color ColorID 8
-    mol material EdgyShiny
-    mol addrep top
-       
-    # Terminal Oxygen
-    mol selection {type oh}
-    mol representation CPK 3.5 1.2000000 50 25
-    mol color ColorID 1
-    mol material EdgyShiny
-    mol addrep top
-    
-    # Oxygen in PEG backbone
-    mol selection {type os}
-    mol representation CPK 1.0 1.2000000 50 25
-    mol color ColorID 1
-    mol material EdgyShiny
-    mol addrep top
-    
-    # Ligand backbone
-    mol selection $ligand_backbone
-    mol representation Licorice 0.150000 50.000000 50.000000
-    mol color ColorID 2
-    mol material Translucent
-    mol addrep top    
-    
-    # Hydrogen on terminal hydroxyl
-	mol selection {type ho}
-    mol representation CPK 2.0 0.0 50 25
-    mol color ColorID 8
-    mol material EdgyShiny
-    mol addrep top
-           
-    # Nucleic acids
-    mol selection $nucleobases
-    mol representation Licorice 0.300000 50.000000 50.000000
-    mol color ColorID 6
-    mol material EdgyShiny
-    mol addrep top    
-
-    mol selection $nucleobases    
-    mol representation NewRibbons 0.10 50 1.06 $spline_style
-    mol color ColorID 6
-    mol material EdgyShiny
-    mol addrep top
-    
-    # Highlight backbone in contact with ligands.
-	mol selection $nucleic_back_not_near
-	mol representation NewRibbons 2.05 10 1.06 $spline_style
-    mol color ColorID 6
-    mol material EdgyShiny
+	mol representation Lines 1.000000
+	mol color Name
+	mol selection {resname Olm}
+	mol material Opaque
 	mol addrep top
-	mol selupdate 10 top 1
-	mol colupdate 10 top 1
-	
-    mol selection $nucleic_back_near
-    mol representation NewRibbons 2.05 50 1.06 $spline_style
-    mol color ColorID 30
-    mol material EdgyShiny
-    mol addrep top
-	mol selupdate 11 top 1
-	mol colupdate 11 top 1
-	    
-    #draw pbcbox
 
+	mol representation CPK 1.000000 0.300000 12.000000 12.000000
+	mol color Name
+	mol selection {resid 73}
+	mol material Opaque
+	mol addrep top
+
+	mol representation VDW 0.500000 12.000000
+	mol color Name
+	mol selection {name C18}
+	mol material Opaque
+	mol addrep top
+
+	mol representation VDW 1.000000 12.000000
+	mol color Name
+	mol selection {resname FeO}
+	mol material Opaque
+	mol addrep top
+
+	mol representation Lines 1.000000
+	mol color Name
+	mol selection {resname SiO}
+	mol material Opaque
+	mol addrep top
+
+	mol representation CPK 1.000000 0.300000 12.000000 12.000000
+	mol color Name
+	mol selection {type si}
+	mol material Opaque
+	mol addrep top
+
+	mol representation VDW 0.500000 12.000000
+	mol color Name
+	mol selection {name O and resname EtO}
+	mol material Opaque
+	mol addrep top
+
+	mol representation VDW 0.500000 12.000000
+	mol color Name
+	mol selection {type ht}
+	mol material Opaque
+	mol addrep top
+
+	mol representation VDW 0.500000 12.000000
+	mol color Name
+	mol selection {type n3}
+	mol material Opaque
+	mol addrep top
 }
+
 
 # Center topology (not by mass)
 user add key c {
@@ -571,81 +437,52 @@ user add key c {
 	$sel_center delete
 }
 user add key d {
-    #Apply preselected graphical representation
-#     set viewplist {}
-#     set fixedlist {}
-    mol delrep 0 top
-    mol representation Licorice 0.500000 10.000000 10.000000
-    mol color ColorID 17
-    mol selection {name P O5'}
-    mol material Opaque
-    mol addrep top
 
-    mol representation Licorice 0.500000 10.000000 10.000000    
-    mol color ColorID 19
-    mol selection {name O5' C5'}
-    mol material Opaque
-    mol addrep top
+	mol representation VDW 0.400000 12.000000
+	mol color ColorID 21
+	mol selection {name C18}
+	mol material Opaque
+	mol addrep top
 
-    mol representation Licorice 0.500000 10.000000 10.000000
-    mol color ColorID 9
-    mol selection {name C5' C4'}
-    mol material Opaque
-    mol addrep top
-    
-    mol representation Licorice 0.500000 10.000000 10.000000
-    mol color ColorID 23
-    mol selection {name C4' C3'}
-    mol material Opaque
-    mol addrep top
+	mol representation VDW 1.000000 12.000000
+	mol color ColorID 23
+	mol selection {type O1}
+	mol material Opaque
+	mol addrep top
 
-    mol representation Licorice 0.500000 10.000000 10.000000
-    mol color ColorID 11
-    mol selection {name C3' O3'}
-    mol material Opaque
-    mol addrep top
+	mol representation VDW 0.700000 12.000000
+	mol color ColorID 4
+	mol selection {type n3}
+	mol material Opaque
+	mol addrep top
 
-    mol representation Licorice 0.500000 10.000000 10.000000
-    mol color ColorID 15
-    mol selection {name O3' P}
-    mol material Opaque
-    mol addrep top
+	mol representation CPK 1.000000 0.900000 12.000000 12.000000
+	mol color Name
+	mol selection {resname Olm}
+	mol material Opaque
+	mol addrep top
 
-    mol representation NewRibbons 0.300000 10.000000 3.000000 0
-    mol color ColorID 6
-    mol selection {nucleic not backbone}
-    mol material Opaque
-    mol addrep top
+	mol representation VDW 1.000000 12.000000
+	mol color ColorID 1
+	mol selection {type F2 or type F1}
+	mol material Opaque
+	mol addrep top
+
 }
 
 user add key e {
-    #Apply preselected graphical representation
-#     set viewplist {}
-#     set fixedlist {}
-
-	clearallreps top
-    mol selection {nucleic}
-    mol representation Licorice 0.300000 10.000000 10.000000
-    mol color ColorID 30
-    mol material AOChalky
-    mol addrep top
+    clearallreps top
     
-    mol representation VDW 1.000000 12.000000
-    mol color Charge
-    mol selection {all not nucleic}
-    mol material EdgyShiny
+    mol representation VDW 0.700000 20.000000
+    mol color Name
+    mol selection {all}
+    mol material Opaque
     mol addrep top
 
-    mol representation NewRibbons 2.05 10 1.06 0
+    mol representation VDW 2.000000 20.000000
     mol color ColorID 30
-    mol selection {nucleic backbone}
-    mol material AOChalky
-    mol addrep top
-
-    mol selection {fragment 1 and nucleic not backbone and not name "H.*"}
-    mol representation Licorice 0.3 10.0 10.0
-    mol color ColorID 20
-    mol material Translucent
+    mol selection {index 538 or index 1008 or index 1895 or index 2365}
+    mol material Opaque
     mol addrep top
 }
 
@@ -713,4 +550,52 @@ proc make_trajectory_movie_files {} {
 		#take_picture reset
         render TachyonLOSPRayInternal $i.tga
         }
+}
+
+
+proc vmd_draw_arrow {mol start end} {
+  set middle [vecadd $start [vecscale 0.9 [vecsub $end $start]]]
+  graphics $mol cylinder $start $middle radius 0.05
+  graphics $mol cone $middle $end radius 0.01 color 3
+}
+
+proc vmd_draw_vector {args} {
+  set usage { "draw vector {x1 y1 z1} {x2 y2 z2} [scale <s>] [resolution <res>] [radius <r>] [filled <yes/no>]" }
+
+  # defaults
+  set scale 2.0
+  set res 50
+  set radius 0.1
+  set filled yes
+
+  if {[llength $args] < 3} {
+    error "wrong # args: should be $usage"
+  }
+  set mol    [lindex $args 0]
+  set center [lindex $args 1]
+  set vector [lindex $args 2]
+  if {[llength $center] != 3 || [llength $vector] != 3} {
+    error "wrong type of args: should be $usage"
+  }
+
+  foreach {flag value} [lrange $args 3 end] {
+    switch -glob $flag {
+      scale  {set scale  $value}
+      res*   {set res    $value}
+      rad*   {set radius $value}
+      fill*  {set filled $value}
+      default {error "unknown option '$flag': should be $usage" }
+    }
+  }
+
+  set vechalf [vecscale [expr $scale * 0.5] $vector]
+  return [list \
+  [graphics $mol color yellow]\
+  [graphics $mol cylinder [vecsub $center $vechalf]\
+  [vecadd $center [vecscale 0.7 $vechalf]] \
+  radius $radius resolution $res filled $filled] \
+  [graphics $mol color orange]\
+  [graphics $mol cone [vecadd $center [vecscale 0.6 $vechalf]] \
+  [vecadd $center $vechalf] radius [expr $radius * 2.5] \
+  resolution $res]]
 }

@@ -138,7 +138,7 @@ if havecmd git; then
 	gitac() {
 		git add -u
 		git status
-		local msg="${1:-AutoSave}"
+		local msg="${@:-AutoSave}"
 		echo
 		read -e -i "$msg" -p "Commit Message: " msg
 		git commit -m "${msg}"
@@ -459,12 +459,15 @@ makereadME() {
 #!/usr/bin/env bash
 
 cat << EOF
+
 	${content}
+
 EOF
 
 END
 
 	chmod +x readME
+	${EDITOR} readME
 }
 
 readme() {
@@ -516,6 +519,12 @@ tellme() { sleep $1 && spd-say "$2" & }
 # List path entries of PATH or environment variable <var>.
 # Usage: pls [<var>]
 pls () { eval echo \$${1:-PATH} |tr : '\n'; }
+
+# add current directory to the environment path variables
+# e.g.: pla PYTHONPATH
+pla () {
+	eval export ${1:-PATH}=`pwd`:\$${1:-PATH}
+}
 
 # For some reason, rot13 pops up everywhere
 rot13 () {
