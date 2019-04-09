@@ -473,15 +473,24 @@ user add key d {
 user add key e {
     clearallreps top
     
-    mol representation VDW 0.700000 20.000000
+    # mol representation VDW 0.700000 10.000000
+    mol representation Lines 1.000000
     mol color Name
     mol selection {all}
     mol material Opaque
     mol addrep top
 
+    # negative atoms = blue
+    mol representation VDW 2.000000 20.000000
+    mol color ColorID 0
+    mol selection {index 4609 or index 1895 or index 8680 or index 5966 or index 3252 or index 10037 or index 538 or index 7323}
+    mol material Opaque
+    mol addrep top
+
+    # positive atoms = red
     mol representation VDW 2.000000 20.000000
     mol color ColorID 30
-    mol selection {index 538 or index 1008 or index 1895 or index 2365}
+    mol selection {index 1008 or index 2365 or index 3722 or index 5079 or index 6436 or index 7793 or index 9150 or index 10507}
     mol material Opaque
     mol addrep top
 }
@@ -552,50 +561,94 @@ proc make_trajectory_movie_files {} {
         }
 }
 
+# MSPIN Magnetic Alignment
+# ===================================================================================
 
-proc vmd_draw_arrow {mol start end} {
+proc draw_dipole {ind1 ind2 cutoff} {
+  set start [lindex [[atomselect top "index $ind1"] get {x y z}] 0]
+  set end [lindex [[atomselect top "index $ind2"] get {x y z}] 0]
   set middle [vecadd $start [vecscale 0.9 [vecsub $end $start]]]
-  graphics $mol cylinder $start $middle radius 0.05
-  graphics $mol cone $middle $end radius 0.01 color 3
+  if { abs([veclength [vecsub $end $start]]) < $cutoff } {
+    graphics top color red
+    graphics top cylinder $start $middle radius 0.9
+    graphics top color blue
+    graphics top cone $middle $end radius 2.0
+  }
 }
 
-proc vmd_draw_vector {args} {
-  set usage { "draw vector {x1 y1 z1} {x2 y2 z2} [scale <s>] [resolution <res>] [radius <r>] [filled <yes/no>]" }
+proc draw_mspin {args} {
+  # spheres
+  # set negatives [lsort -integer {4609 1895 8680 5966 3252 10037 538 7323}]
+  # set positives [lsort -integer {1008 2365 3722 5079 6436 7793 9150 10507}]
 
-  # defaults
-  set scale 2.0
-  set res 50
-  set radius 0.1
-  set filled yes
+  # cubes
+  set negatives [lsort -integer {841 4425 11593 8009 15177 18761 22345 25929}]
+  set positives [lsort -integer {1153 4737 8321 11905 15489 19073 22657 26241}]
 
-  if {[llength $args] < 3} {
-    error "wrong # args: should be $usage"
+  # cutoff to fix pbc long dipole
+  set cutoff 32
+
+  graphics top delete all
+  pbc box -center origin
+  # each frame 2 ps = 0.002 ns
+  set ftime [expr { [molinfo top get frame] * 0.002 }]
+  graphics top text {-5 -5 -5} [format "%.3fns" $ftime] size 1 thickness 2
+  set natoms [molinfo top get numatoms]
+
+  if {[llength $negatives] != [llength $positives]} {
+    error "Mspin pairs list mismatch"
   }
-  set mol    [lindex $args 0]
-  set center [lindex $args 1]
-  set vector [lindex $args 2]
-  if {[llength $center] != 3 || [llength $vector] != 3} {
-    error "wrong type of args: should be $usage"
-  }
 
-  foreach {flag value} [lrange $args 3 end] {
-    switch -glob $flag {
-      scale  {set scale  $value}
-      res*   {set res    $value}
-      rad*   {set radius $value}
-      fill*  {set filled $value}
-      default {error "unknown option '$flag': should be $usage" }
+  for {set i 0} {$i < [llength $negatives]} {incr i} {
+    set a [lindex $negatives $i]
+    set b [lindex $positives $i]
+    if { $a < $natoms && $b < $natoms } {
+      draw_dipole $a $b $cutoff
     }
   }
-
-  set vechalf [vecscale [expr $scale * 0.5] $vector]
-  return [list \
-  [graphics $mol color yellow]\
-  [graphics $mol cylinder [vecsub $center $vechalf]\
-  [vecadd $center [vecscale 0.7 $vechalf]] \
-  radius $radius resolution $res filled $filled] \
-  [graphics $mol color orange]\
-  [graphics $mol cone [vecadd $center [vecscale 0.6 $vechalf]] \
-  [vecadd $center $vechalf] radius [expr $radius * 2.5] \
-  resolution $res]]
 }
+
+proc enable_trace {} {
+  global vmd_frame
+  draw_mspin top
+  trace variable vmd_frame([molinfo top]) w draw_mspin
+}
+
+user add key u {
+  pbc wrap -compound res -all -center origin
+}
+
+user add key e {
+    clearallreps top
+    
+    # mol representation VDW 0.700000 10.000000
+    # mol representation Lines 2.000000
+    mol representation Points 2.000000
+    mol color Name
+    mol selection {all}
+    mol material Opaque
+    mol addrep top
+
+    enable_trace
+
+    # # negative atoms = blue
+    # mol representation VDW 2.000000 20.000000
+    # mol color ColorID 0
+    # mol selection {index 4609 or index 1895 or index 8680 or index 5966 or index 3252 or index 10037 or index 538 or index 7323}
+    # mol material Opaque
+    # mol addrep top
+
+    # # positive atoms = red
+    # mol representation VDW 2.000000 20.000000
+    # mol color ColorID 30
+    # mol selection {index 1008 or index 2365 or index 3722 or index 5079 or index 6436 or index 7793 or index 9150 or index 10507}
+    # mol material Opaque
+    # mol addrep top
+}
+
+proc distanceByIndex {ind1 ind2} {
+  set start [lindex [[atomselect top "index $ind1"] get {x y z}] 0]
+  set end [lindex [[atomselect top "index $ind2"] get {x y z}] 0]
+  return [veclength [vecsub $end $start]]
+}
+
