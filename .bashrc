@@ -140,12 +140,15 @@ if havecmd git; then
 		git status
 		local msg="${@:-AutoSave}"
 		echo
-		read -e -i "$msg" -p "Commit Message: " msg
+		read -e -i "$msg" -p "Commit Message (CTRL-c to cancel): " msg
 		git commit -m "${msg}"
 	}
 
 	# git oneliner log
 	alias gitol='git log --oneline -n'
+
+	# "A Dog" = All Decorate Oneline Graph
+	alias gitadog='git log --all --decorate --oneline --graph'
 
 	# git create and switch to a new branch
 	# ex: git checkout -b new-branch
