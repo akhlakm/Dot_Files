@@ -441,6 +441,17 @@ function open () {
 	fi
 }
 
+# open a jupyter lab workspace
+jlab() {
+	# check if server is running or start it
+	nc -4 -d -z -w 1 127.0.0.1 7800 &> /dev/null
+	if [[ $? -ne 0 ]]; then
+		nohup jupyter lab --port=7800 --no-browser &> /tmp/jlab.log &
+		sleep 1
+	fi
+	open "http://localhost:7800/lab/workspaces/$1"
+}
+
 # Quick google search
 # example 'google "Weather Today"'
 google() {

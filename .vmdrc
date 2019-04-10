@@ -589,7 +589,8 @@ proc draw_mspin {args} {
   set cutoff 32
 
   graphics top delete all
-  pbc box -center origin
+  # pbc box -center origin
+  pbc box
   # each frame 2 ps = 0.002 ns
   set ftime [expr { [molinfo top get frame] * 0.002 }]
   graphics top text {-5 -5 -5} [format "%.3fns" $ftime] size 1 thickness 2
@@ -615,7 +616,8 @@ proc enable_trace {} {
 }
 
 user add key u {
-  pbc wrap -compound res -all -center origin
+  # pbc wrap -compound res -all -center origin
+  pbc wrap -compound res -all
 }
 
 user add key e {
