@@ -121,7 +121,7 @@ git_prompt() {
 if havecmd make; then
 	if [[ ! -f ~/Makefile ]]; then
 		if [[ -f ~/Dot_Files/Makefile ]]; then 
-			ln -s Makefile Dot_Files/Makefile
+			ln -s Dot_Files/Makefile Makefile
 		else
 			echo "No Makefile found in the home directory."
 			echo "You can get it from https://github.com/akhlakm/Dot_Files"
