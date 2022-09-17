@@ -3,19 +3,32 @@ EMAIL = me@akhlakm.com
 all:
 	@sed -rn 's/^([a-zA-Z_-]+):$$/"\1"/p' < $(MAKEFILE_LIST) | xargs printf "make %-20s\n"
 
-setup_git:
+setup-git:
 	git config --global user.name ${USER}
 	git config --global user.email ${EMAIL}
 
-setup_github:
+ssh-key:
 	@if [ ! -f ~/.ssh/id_ed25519 ]; then\
-		ssh-keygen -t ed25519 -C "me@akhlakm.com";\
+		ssh-keygen -t ed25519 -C "${EMAIL}";\
 		eval "$(ssh-agent -s)";\
 		ssh-add ~/.ssh/id_ed25519;\
 	fi
+	@echo "Please copy and paste the line below to `~/.ssh/authorized_keys` on the remote server."
 	cat ~/.ssh/id_ed25519.pub
 
-portainer:
+ssh-uploadkey:
+	$(eval server = $(shell bash -c 'read -p "Remote Server IP: " temp; echo $$temp'))
+	$(eval username = $(shell bash -c 'read -p "User: " temp; echo $$temp'))
+	if [ ! -f ~/.ssh/id_ed25519 ]; then make ssh-key; fi
+	cat ~/.ssh/id_ed25519.pub | ssh $(username)@$(server) "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+ssh-disablepassword:
+	sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+	sudo sed -i 's/ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/g' /etc/ssh/sshd_config
+	sudo sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+	sudo systemctl restart ssh || sudo systemctl restart sshd
+
+docker-portainer:
 	sudo chown :docker /var/run/docker.sock
 	sudo chmod g+w /var/run/docker.sock
 	docker volume create portainer_data
@@ -26,22 +39,22 @@ portainer:
 		portainer/portainer-ce
 	@echo "OK. Portainer WebUI available on port :9443 (port forwarded/firewall allowed?)"
 
-install_docker:
+install-docker:
 	curl -fsSL https://get.docker.com -o get-docker.sh
 	sudo sh get-docker.sh
 	sudo groupadd docker || true
 	sudo usermod -aG docker ${USER}
+	remove get-docker.sh
 	newgrp docker
 	mkdir ~/docker
-	sudo chown docker ~/docker
-	remove get-docker.sh
+	exit 0
 
-remove_snap:
+remove-snap:
 	sudo rm -rf /var/cache/snapd/
 	sudo apt autoremove --purge snapd
 	sudo rm -fr ~/snap
 
-photoprism:
+docker-photoprism:
 	@docker run -d --name photoprism \
 		--security-opt seccomp=unconfined \
 		--security-opt apparmor=unconfined \
