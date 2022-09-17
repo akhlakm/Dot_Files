@@ -81,3 +81,8 @@ docker-photoprism:
 unattended-upgrades-debian:
 	sudo apt update && sudo apt install unattended-upgrades bsd-mailx
 	sudo vim /etc/apt/apt.conf.d/50unattended-upgrades
+
+unattended-upgrades-centos:
+	sudo yum install dnf-automatic
+	sudo vim /etc/dnf/automatic.conf
+	sudo systemctl enable --now dnf-automatic.timer
