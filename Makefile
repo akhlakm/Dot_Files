@@ -16,7 +16,7 @@ ssh-key:
 	@echo "Please copy and paste the line below to `~/.ssh/authorized_keys` on the remote server."
 	cat ~/.ssh/id_ed25519.pub
 
-ssh-uploadkey:
+ssh-upload:
 	$(eval server = $(shell bash -c 'read -p "Remote Server IP: " temp; echo $$temp'))
 	$(eval username = $(shell bash -c 'read -p "User: " temp; echo $$temp'))
 	if [ ! -f ~/.ssh/id_ed25519 ]; then make ssh-key; fi
@@ -67,3 +67,6 @@ docker-photoprism:
 	@echo "Started photoprism on :2342, need port forward/allow?"
 	@echo "Media files are assumed to be in the ~/Media directory."
 
+unattended-upgrades-debian:
+	sudo apt update && sudo apt install unattended-upgrades bsd-mailx
+	sudo vim /etc/apt/apt.conf.d/50unattended-upgrades
