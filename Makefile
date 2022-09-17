@@ -3,6 +3,10 @@ EMAIL = me@akhlakm.com
 all:
 	@sed -rn 's/^([a-zA-Z_-]+):$$/"\1"/p' < $(MAKEFILE_LIST) | xargs printf "make %-20s\n"
 
+update:
+	cd ~/Dot_Files/ && git pull
+	source ~/Dot_Files/bashrc
+
 setup-git:
 	git config --global user.name ${USER}
 	git config --global user.email ${EMAIL}
