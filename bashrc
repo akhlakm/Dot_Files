@@ -115,10 +115,17 @@ git_prompt() {
 	unset git_prompt
 }
 
+# Makefile at the home directory.
+# Useful to automate setups.
+# ---------------------------------
 if havecmd make; then
 	if [[ ! -f ~/Makefile ]]; then
-		echo "No Makefile found in the home directory."
-		echo "You can get it from the same source as this bashrc."
+		if [[ -f ~/Dot_Files/Makefile ]]; then 
+			ln -s Makefile Dot_Files/Makefile
+		else
+			echo "No Makefile found in the home directory."
+			echo "You can get it from https://github.com/akhlakm/Dot_Files"
+		fi
 	fi
 else
 	echo "Make does not exist. Attempting to install ..."
