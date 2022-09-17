@@ -20,6 +20,13 @@ ssh-key:
 	@echo "Please copy and paste the line below to `~/.ssh/authorized_keys` on the remote server."
 	cat ~/.ssh/id_ed25519.pub
 
+ssh-add-pubkey:
+	@echo "Please `cat ~/.ssh/id_*.pub` on your client and"
+	$(eval key = $(shell bash -c 'read -p "Copy and Paste SSH pubkey line: " temp; echo $$temp'))
+	[ $(key) == "" ] && exit 1
+	@mkdir -p ~/.ssh && echo "$(key)" >> ~/.ssh/authorized_keys
+	cat ~/.ssh/authorized_keys && echo OK
+
 ssh-upload:
 	$(eval server = $(shell bash -c 'read -p "Remote Server IP: " temp; echo $$temp'))
 	$(eval username = $(shell bash -c 'read -p "User: " temp; echo $$temp'))
@@ -48,7 +55,7 @@ install-docker:
 	sudo sh get-docker.sh
 	sudo groupadd docker || true
 	sudo usermod -aG docker ${USER}
-	remove get-docker.sh
+	rm get-docker.sh
 	newgrp docker
 	mkdir ~/docker
 	exit 0
