@@ -1,6 +1,6 @@
 # Custom .bashrc
 # Author: Akhlak Mahmood <mahmoodakhlak at gmail dot com>
-# Version: 2018.2
+# Version: 2022.9
 # ------------------------------------------------------------------------
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
@@ -343,12 +343,6 @@ alias rsynclimit="rsync -avhrR --progress --bwlimit=50000"
 # Navigation helpers
 # ---------------------------------
 
-# Back navigation helpers
-alias cd..='cd ..'
-alias cd...='cd ../..'
-alias cd....='cd ../../..'
-alias cd.....='cd ../../../..'
-
 # Hide pushd popd outputs
 pushd () {
 	command pushd "$@" > /dev/null
@@ -368,11 +362,6 @@ cd() {
 	ls # "it is useful to call ls from cd"
 }
 
-# Record cd items to dir structure
-alias cd-='popd'
-alias cd--='popd -2'
-alias cd---='popd -3'
-
 alias d='dirs -v'
 alias b='pushd +1'
 alias p='pwd'
@@ -381,36 +370,6 @@ alias p='pwd'
 search() {
 	command find . -iname "*$1*"
 }
-
-# cheat
-if [[ "$color_prompt" = yes && -d ~/.cheat ]]; then
-	export CHEATCOLORS=yes
-fi
-
-# Working Directory
-# A simple set of aliases and functions that allows
-# named storage and quick retrieval of directories.
-# --------------------------------------------------
-# Original: https://github.com/karlin/working-directory
-if [[ -d ~/.wd ]]; then
-	export WDHOME="$HOME/.wd"
-	source "$WDHOME/wd.sh"
-else
-	# You may want to install working-directory by running 'installwd'
-	installwd() {
-		cd /tmp &&\
-		git clone https://github.com/akhlak-mahmood/working-directory.git &&\
-		cd working-directory
-
-		# ./install.sh
-		mkdir -p "$HOME/.wd/"
-		cp -i ./wd/* "$HOME/.wd/"
-		cp ./README "$HOME/.wd/"
-
-		export WDHOME="$HOME/.wd"
-		source "$WDHOME/wd.sh" && unset installwd
-	}
-fi
 
 # Quick and fast access
 # ---------------------------------
@@ -518,15 +477,6 @@ backupd-sudo() {
 	echo; echo "** OK: ${dest}/backup.tar.gz"
 }
 
-readme() {
-	local name=$(find . -maxdepth 1 -iname *readme*)
-	if [[ -n $name ]]; then
-		echo 'No README found.'
-	else
-		cat $name
-	fi
-}
-
 # Swap two files.
 # If the second file doesn't exist, empty one is created for it.
 # Be careful, both files will exist, only contents are exchaned.
@@ -557,15 +507,6 @@ pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 # e.g.: pla PYTHONPATH
 pla () {
 	eval export ${1:-PATH}=`pwd`:\$${1:-PATH}
-}
-
-# For some reason, rot13 pops up everywhere
-rot13 () {
-	if [ $# -eq 0 ]; then
-		tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
-	else
-		echo $* | tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
-	fi
 }
 
 ffmpeg-compress() {
@@ -629,21 +570,3 @@ if ! shopt -oq posix; then
 	. /etc/bash_completion
   fi
 fi
-
-
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('/home/akhlak/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/home/akhlak/miniconda3/etc/profile.d/conda.sh" ]; then
-#         . "/home/akhlak/miniconda3/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/home/akhlak/miniconda3/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-# <<< conda initialize <<<
-
