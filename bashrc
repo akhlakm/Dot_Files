@@ -115,6 +115,16 @@ git_prompt() {
 	unset git_prompt
 }
 
+if havecmd make; then
+	if [[ ! -f ~/Makefile ]]; then
+		echo "No Makefile found in the home directory."
+		echo "You can get it from the same source as this bashrc."
+	fi
+else
+	echo "Make does not exist. Attempting to install ..."
+	sudo apt install make
+fi
+
 # Git helpers
 # Some later items depend on it.
 # It should be configured first.
@@ -281,11 +291,19 @@ alias l='ls -CF'
 alias cls='clear'
 
 # Set the default editor
-if havecmd subl; then
+if havecmd kate; then
+	export EDITOR=kate
+elif havecmd subl; then
 	export EDITOR=subl
+elif havecmd code; then
+	export EDITOR=code
+elif havecmd vim; then
+	export EDITOR=vim
 else
 	export EDITOR=vi
 fi
+
+export VISUAL="$EDITOR"
 
 # add some humanity
 alias free='free -h'
@@ -307,7 +325,7 @@ alias remove="/bin/rm -I"
 alias say='spd-say'
 
 
-# display sorted directory file size 
+# display sorted directory file size
 alias dus="du --max-depth=1 | sort -nr"
 
 # grep history
@@ -318,16 +336,18 @@ alias gh='history | grep'
 # grep running processes
 alias gp='ps aux | grep'
 
-# Copy with a progress bar, limit speed to 30mbps
-alias rsync="rsync -avh --progress --bwlimit=30000"
+# Copy with a progress bar, limit speed to 50mbps
+alias rsync2="rsync -avrRh --info=progress2"
+alias rsynclimit="rsync -avhrR --progress --bwlimit=50000"
 
 # Navigation helpers
 # ---------------------------------
 
 # Back navigation helpers
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
+alias cd..='cd ..'
+alias cd...='cd ../..'
+alias cd....='cd ../../..'
+alias cd.....='cd ../../../..'
 
 # Hide pushd popd outputs
 pushd () {
@@ -356,6 +376,11 @@ alias cd---='popd -3'
 alias d='dirs -v'
 alias b='pushd +1'
 alias p='pwd'
+
+# case insensitive search inside current directory
+search() {
+	command find . -iname "*$1*"
+}
 
 # cheat
 if [[ "$color_prompt" = yes && -d ~/.cheat ]]; then
@@ -391,6 +416,7 @@ fi
 # ---------------------------------
 alias bashrc='${EDITOR} ~/.bashrc'
 alias bashaliases='${EDITOR} ~/.bash_aliases'
+alias installer='${EDITOR} ~/.installer.sh'
 if havecmd git; then alias gitconfig='${EDITOR} ~/.gitconfig'; fi
 
 # source bashrc
@@ -413,6 +439,11 @@ if havecmd vmd; then alias vmdrc='${EDITOR} ~/.vmdrc'; fi
 
 if havecmd google-chrome; then alias chrome='google-chrome'; fi
 
+if __test -d ~/.config/matplotlib; then
+	alias mplrc='${EDITOR} ~/.config/matplotlib/matplotlibrc'
+	mplrc="~/.config/matplotlib/matplotlibrc"
+fi
+
 # Useful tools
 # ---------------------------------
 
@@ -424,7 +455,7 @@ here() {
 		nautilus "$path" &
 	elif havecmd explorer; then
 		# cygwin or git-bash
-		explorer "$path" &		
+		explorer "$path" &
 	fi
 }
 
@@ -449,7 +480,7 @@ jlab() {
 		nohup jupyter lab --port=7800 --no-browser &> /tmp/jlab.log &
 		sleep 1
 	fi
-	open "http://localhost:7800/lab/workspaces/$1"
+	open "http://localhost:7800/$1"
 }
 
 # Quick google search
@@ -465,23 +496,26 @@ localhost() {
 	open "http://localhost:${port}${path}"
 }
 
+backupd() {
+	# Backup a directory
+	[[ -d $1 ]] || return 1
+	dest=$(date +%y%m%d)$1
+	mkdir -p $dest || return 2
+	echo "** [$USER@$HOSTNAME:$PWD $(date)]\$ backupd"	| tee ${dest}/README.txt
+	echo "** RESTORE: tar -C $1 -xzf backup.tar.gz" 	| tee -a ${dest}/README.txt
+	tar -cvzpf ${dest}/backup.tar.gz -C $1 . 			| tee -a ${dest}/README.txt
+	echo; echo "** OK: ${dest}/backup.tar.gz"
+}
 
-# make a bash script named 'readME'
-makereadME() {
-	local content="${1:-Nothing Here.}"
-	cat << END > readME
-#!/usr/bin/env bash
-
-cat << EOF
-
-	${content}
-
-EOF
-
-END
-
-	chmod +x readME
-	${EDITOR} readME
+backupd-sudo() {
+	# Backup a directory with sudo
+	[[ -d $1 ]] || return 1
+	dest=$(date +%y%m%d)$1
+	sudo mkdir -p $dest || return 2
+	echo "** [$USER@$HOSTNAME:$PWD $(date)]\$ backupd-sudo"	| sudo tee ${dest}/README.txt
+	echo "** RESTORE: tar -C $1 -xzf backup.tar.gz" 		| sudo tee -a ${dest}/README.txt
+	sudo tar -cvzpf ${dest}/backup.tar.gz -C $1 . 			| sudo tee -a ${dest}/README.txt
+	echo; echo "** OK: ${dest}/backup.tar.gz"
 }
 
 readme() {
@@ -489,7 +523,7 @@ readme() {
 	if [[ -n $name ]]; then
 		echo 'No README found.'
 	else
-		cat $name 
+		cat $name
 	fi
 }
 
@@ -505,21 +539,6 @@ swap() {
 	mv -v "swap.${file1}" "${file2}"
 	echo done
 }
-
-# Helper function to quickly sync bashrc using Dropbox.
-# You may override this function in ~/.bash_aliases to include other dot files.
-# Consider using dotrepo() to version control dotfiles.
-if __test -d ~/Dropbox; then
-dotsyn() {
-	if __test ~/.bashrc -nt ~/Dropbox/dotfiles/bash.rc; then
-		rsync ~/.bashrc ~/Dropbox/dotfiles/bash.rc
-	elif __test ~/.bashrc -ot ~/Drobox/dotfiles/bash.rc; then
-		rsync ~/Dropbox/dotfiles/bash.rc ~/.bashrc
-	else
-		echo "Files are in sync."
-	fi
-}
-fi
 
 # from https://github.com/helmuthdu/dotfiles/blob/master/.bashrc
 # REMIND ME, ITS IMPORTANT!
@@ -549,10 +568,31 @@ rot13 () {
 	fi
 }
 
+ffmpeg-compress() {
+	ffmpeg -i "$1" -vcodec h264 -b:v 1000k -acodec mp2 "${2:-compressed.mp4}"
+	# ffmpeg -i "$1" -vcodec libx264 -x264-params crf=18 -preset veryslow -acodec copy "${2:-compressed.mp4}"
+}
+
+ffmpeg-slowdown() {
+	ffmpeg -i "$1" -filter:v "setpts=PTS*$2" "${3:-slow.mp4}"
+}
+
+ffmpeg-scale() {
+	ffmpeg -i "$1" -vf scale=$2:$3 "${4:-scaled$2by$3.mp4}"
+}
+
 # do math
 math() {
 	echo "scale=4;$*" | bc
 }
+
+# create some env vars for applications
+export PASS=$(</dev/urandom tr -dc A-Za-z0-9_$#%*+=@$ | head -c16)
+if [[ ! -f ~/.passwords ]]; then
+	echo "# List of bashrc auto-generated passwords." > ~/.passwords
+fi
+echo $PASS >> ~/.passwords
+alias pass="tail -n 1 ~/.passwords"
 
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------
@@ -565,11 +605,15 @@ if [ -f ~/.bash_aliases ]; then
 else
 	cat << EOF > ~/.bash_aliases
 # ~/.bash_aliases for ${USER}@${HOSTNAME}
-# This file should contain everything that is only specific to 
+# This file should contain everything that is only specific to
 # this computer (path, variable, alias, color etc.).
 # Any sharable configuration should go into ~/.bashrc
 
-# xterm_setcolor $green $RED
+# xterm_setcolor \$green \$RED
+
+# If you have a backup in Dropbox, create a symlink. Examples -
+# sudo ln -s ~/Dropbox/dotfiles/work_aliases ~/.bash_aliases
+# sudo ln -s ~/Dropbox/dotfiles/home_aliases ~/.bash_aliases
 
 EOF
 	vi ~/.bash_aliases
@@ -585,3 +629,21 @@ if ! shopt -oq posix; then
 	. /etc/bash_completion
   fi
 fi
+
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+# __conda_setup="$('/home/akhlak/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/home/akhlak/miniconda3/etc/profile.d/conda.sh" ]; then
+#         . "/home/akhlak/miniconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/home/akhlak/miniconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# <<< conda initialize <<<
+
