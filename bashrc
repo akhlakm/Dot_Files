@@ -174,35 +174,6 @@ if havecmd git; then
 
 	# checkout from stash[0]
 	alias gitcs='git checkout "stash@{0}" --'
-
-	# Version control dotfiles
-	# Inspired by: https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
-	if __test -d ~/.dotrepo; then
-		dot() {
-			# use dot from anywhere
-			git --git-dir="$HOME/.dotrepo/" --work-tree="$HOME" "$@"
-		}
-	else
-		# call 'dotrepo' to setup dot to version control dot files
-		dotrepo() {
-			cd ~
-			git init --bare .dotrepo
-			read -p "Press ENTER to continue ..."
-			dot() {
-				git --git-dir="$HOME/.dotrepo/" --work-tree="$HOME" "$@"
-			}
-			# we are excluding everything, you have to force add to repo
-			# use 'dot add -f <file>'
-			echo '*' >> .dotrepo/info/exclude
-			dot config --local status.showUntrackedFiles no
-			dot status
-			echo
-			echo "Repository set. You may want to add remote as 'dot remote add origin <url>'"
-			echo "Then pull, add and push."
-			unset dotrepo
-		}
-	fi
-
 else
 	echo "Git not found. Please consider installing it."
 fi
