@@ -22,10 +22,10 @@ ssh-key:
 
 ssh-add-pubkey:
 	@echo "Please `cat ~/.ssh/id_*.pub` on your client and"
-	$(eval key = $(shell bash -c 'read -p "Copy and Paste SSH pubkey line: " temp; echo $$temp'))
-	[ $(key) == "" ] && exit 1
+	@$(eval key = $(shell bash -c 'read -p "Copy and Paste SSH pubkey line: " temp; echo $$temp'))
+	@if [ $(key) == "" ]; then exit 1; fi
 	@mkdir -p ~/.ssh && echo "$(key)" >> ~/.ssh/authorized_keys
-	cat ~/.ssh/authorized_keys && echo OK
+	@cat ~/.ssh/authorized_keys && echo OK
 
 ssh-upload:
 	$(eval server = $(shell bash -c 'read -p "Remote Server IP: " temp; echo $$temp'))
@@ -71,6 +71,7 @@ docker-photoprism:
 		--security-opt apparmor=unconfined \
 		-p 2342:2342 \
 		-e PHOTOPRISM_UPLOAD_NSFW="true" \
+		-e PHOTOPRISM_AUTH_MODE="public" \
 		-e PHOTOPRISM_ADMIN_PASSWORD="${PASS}" \
 		-v ~/docker/photoprism/storage:/photoprism/storage \
 		-v ~/Media:/photoprism/originals \
