@@ -1,9 +1,11 @@
+EMAIL = me@akhlakm.com
+
 all:
 	@sed -rn 's/^([a-zA-Z_-]+):$$/"\1"/p' < $(MAKEFILE_LIST) | xargs printf "make %-20s\n"
 
 setup_git:
-	git config --global user.name akhlakm
-	git config --global user.email me@akhlakm.com
+	git config --global user.name ${USER}
+	git config --global user.email ${EMAIL}
 
 setup_github:
 	@if [ ! -f ~/.ssh/id_ed25519 ]; then\
