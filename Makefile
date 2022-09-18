@@ -1,11 +1,12 @@
 EMAIL = me@akhlakm.com
+DOT = ~/Dot_Files
 
 all:
 	@sed -rn 's/^([a-zA-Z_-]+):$$/"\1"/p' < $(MAKEFILE_LIST) | xargs printf "make %-20s\n"
 
 update:
-	cd ~/Dot_Files/ && git pull
-	source ~/Dot_Files/bashrc
+	cd $(DOT)/ && git pull
+	source $(DOT)/bashrc
 
 setup-git:
 	git config --global user.name ${USER}
@@ -23,7 +24,7 @@ ssh-key:
 ssh-add-pubkey:
 	@echo "Please `cat ~/.ssh/id_*.pub` on your client and"
 	@$(eval key = $(shell bash -c 'read -p "Copy and Paste SSH pubkey line: " temp; echo $$temp'))
-	@if [ $(key) == "" ]; then exit 1; fi
+	@if [ "$(key)" = "" ]; then exit 1; fi
 	@mkdir -p ~/.ssh && echo "$(key)" >> ~/.ssh/authorized_keys
 	@cat ~/.ssh/authorized_keys && echo OK
 
@@ -97,3 +98,17 @@ ansible:
 	echo "export PATH=\$PATH:${HOME}/.local/bin" >> ~/.bash_aliases
 	python3 get-pip.py --user || python get-pip.py --user
 	python3 -m pip install --user ansible || python -m pip install --user ansible
+
+network-static-centos:
+	@read -p "Please update the following file with the device name. Press Enter ..." temp
+	@editor $(DOT)/network/rhel.conf
+	$(eval interface = $(shell bash -c 'read -p "Device Name [ex. enp0s1]: " temp; echo $$temp'))
+	@if [ "$(interface)" = "" ]; then exit 1; fi
+	# @sudo cp $(DOT)/network/rhel.conf /etc/sysconfig/network-scripts/ifcfg-$(interface)
+	@echo OK. Please reboot for the changes to take effect.
+
+network-static-debian:
+	@read -p "Please update the following file with the device name. Press Enter ..." temp
+	@editor $(DOT)/network/debian.conf
+	@sudo cp $(DOT)/network/debian.conf /etc/systemd/network/static.network
+	@echo OK. Please reboot for the changes to take effect.
