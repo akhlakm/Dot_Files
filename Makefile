@@ -15,8 +15,6 @@ setup-git:
 ssh-key:
 	@if [ ! -f ~/.ssh/id_ed25519 ]; then\
 		ssh-keygen -t ed25519 -C "${EMAIL}";\
-		eval "$(ssh-agent -s)";\
-		ssh-add ~/.ssh/id_ed25519;\
 	fi
 	@echo "Please copy and paste the line below to `~/.ssh/authorized_keys` on the remote server."
 	cat ~/.ssh/id_ed25519.pub
