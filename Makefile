@@ -87,3 +87,7 @@ unattended-upgrades-centos:
 	sudo yum install dnf-automatic
 	sudo vim /etc/dnf/automatic.conf
 	sudo systemctl enable --now dnf-automatic.timer
+
+disable-laptop-sleep:
+	echo HandleLidSwitch=lock >> /etc/systemd/logind.conf
+	echo HandlePowerKey=ignore >> /etc/systemd/logind.conf
