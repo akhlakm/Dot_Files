@@ -95,9 +95,11 @@ disable-laptop-sleep:
 
 ansible:
 	curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-	echo "export PATH=\$PATH:${HOME}/.local/bin" >> ~/.bash_aliases
 	python3 get-pip.py --user || python get-pip.py --user
 	python3 -m pip install --user ansible || python -m pip install --user ansible
+	echo "export PATH=\$${PATH}:${HOME}/.local/bin" >> ~/.bash_aliases
+	echo "export ANSIBLE_CONFIG=$(DOT)/ansible/ansible.cfg" >> ~/.bash_aliases
+	@echo "OK. Please source your bash_aliases."
 
 network-static-centos:
 	@read -p "Please update the following file with the device name. Press Enter ..." temp
