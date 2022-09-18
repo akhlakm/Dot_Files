@@ -91,3 +91,9 @@ unattended-upgrades-centos:
 disable-laptop-sleep:
 	echo HandleLidSwitch=lock >> /etc/systemd/logind.conf
 	echo HandlePowerKey=ignore >> /etc/systemd/logind.conf
+
+ansible:
+	curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	echo "export PATH=\$PATH:${HOME}/.local/bin" >> ~/.bash_aliases
+	python3 get-pip.py --user || python get-pip.py --user
+	python3 -m pip install --user ansible || python -m pip install --user ansible
