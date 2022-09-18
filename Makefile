@@ -104,11 +104,13 @@ network-static-centos:
 	@editor $(DOT)/network/rhel.conf
 	$(eval interface = $(shell bash -c 'read -p "Device Name [ex. enp0s1]: " temp; echo $$temp'))
 	@if [ "$(interface)" = "" ]; then exit 1; fi
-	# @sudo cp $(DOT)/network/rhel.conf /etc/sysconfig/network-scripts/ifcfg-$(interface)
+	@sudo cp $(DOT)/network/rhel.conf /etc/sysconfig/network-scripts/ifcfg-$(interface)
 	@echo OK. Please reboot for the changes to take effect.
 
 network-static-debian:
+	@ip addr
 	@read -p "Please update the following file with the device name. Press Enter ..." temp
 	@editor $(DOT)/network/debian.conf
 	@sudo cp $(DOT)/network/debian.conf /etc/systemd/network/static.network
-	@echo OK. Please reboot for the changes to take effect.
+	@sudo systemctl restart systemd-networkd.service
+	@echo OK.
