@@ -482,7 +482,7 @@ tellme() { sleep $1 && spd-say "$2" & }
 pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 
 # add current directory to the environment path variables
-# e.g.: pla PYTHONPATH
+# e.g.: pla, pla PYTHONPATH
 pla () {
 	eval export ${1:-PATH}=`pwd`:\$${1:-PATH}
 }
@@ -513,8 +513,28 @@ fi
 echo $PASS >> ~/.passwords
 alias pass="tail -n 1 ~/.passwords"
 
+# SSH Operations
+# ---------------------------------
+
 # ssh agent for pass phrases
 alias ssha='eval $(ssh-agent) && ssh-add'
+
+# make key pair
+ssh-key() {
+	if [[ ! -f ~/.ssh/id_ed25519 ]]; then
+		ssh-keygen -t ed25519 -C ${HOSTNAME}
+		chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+	fi
+	cat ~/.ssh/id_ed25519.pub
+}
+
+# upload the ed25519 ssh public key to a server
+ssh-upload-key() {
+	read -p "Remote Server IP: " server
+	read -p "User: " username
+	[[ -f ~/.ssh/id_ed25519 ]] || ssh-key
+	cat ~/.ssh/id_ed25519.pub | ssh $(username)@$(server) "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+}
 
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------

@@ -1,0 +1,17 @@
+- include_vars: "main.yml"
+  tags: always
+
+- include_vars: "{{ ansible_facts['os_family']|lower }}.yml"
+  tags: always
+
+- block:
+    - import_tasks: ssh-setup.yml
+
+    - import_tasks: debian-network.yml
+      when: ansible_facts['os_family']|lower == 'debian'
+
+    - import_tasks: redhat-network.yml
+      when: ansible_facts['os_family']|lower == 'redhat'
+
+    - import_tasks: users/akhlak.yml
+    - import_tasks: users/ansible.yml

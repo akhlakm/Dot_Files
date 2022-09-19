@@ -1,0 +1,16 @@
+- name: sshd_config file
+  tags: ssh,system
+  template:
+    src: sshd-config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_sshd
+
+- name: sshd daemon
+  tags: ssh,system
+  service:
+    name: "{{ openssh_service }}"
+    enabled: yes
+    state: started

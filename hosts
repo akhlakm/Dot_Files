@@ -1,0 +1,13 @@
+[dataserver]
+192.168.100.101 ip_address=192.168.100.101
+
+[webserver]
+192.168.100.102 ip_address=192.168.100.102
+
+[workstation]
+192.168.100.103 ip_address=192.168.100.103
+
+[all:vars]
+eth_device=enp0s8
+nameserver1=8.8.8.8
+nameserver2=1.1.1.1
