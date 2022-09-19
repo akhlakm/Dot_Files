@@ -513,6 +513,9 @@ fi
 echo $PASS >> ~/.passwords
 alias pass="tail -n 1 ~/.passwords"
 
+# ssh agent for pass phrases
+alias ssha='eval $(ssh-agent) && ssh-add'
+
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------
 # Load the local aliases and then the bash completion at the end,
