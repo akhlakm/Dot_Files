@@ -6,6 +6,7 @@ all:
 
 update:
 	cd $(DOT)/ && git pull
+	@echo "Please reload bashrc."
 
 setup-git: #on server
 	git config --global user.name ${USER}
