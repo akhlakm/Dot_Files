@@ -8,11 +8,11 @@ update:
 	cd $(DOT)/ && git pull
 	@echo "Please reload bashrc."
 
-setup-git: #on server
+setup-git:
 	git config --global user.name ${USER}
 	git config --global user.email ${EMAIL}
 
-ssh-key: #on client
+ssh-key:
 	@if [ ! -f ~/.ssh/id_ed25519 ]; then\
 		ssh-keygen -t ed25519 -C "${EMAIL}";\
 		chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys\
@@ -20,7 +20,7 @@ ssh-key: #on client
 	@echo "Please copy and paste on the remote servers: make ssh-add-pubkey"
 	cat ~/.ssh/id_ed25519.pub
 
-ssh-add-pubkey: #on server
+ssh-add-pubkey:
 	@$(eval key = $(shell bash -c 'read -p "Please run 'make ssh-key' on your client and copy and paste the key line: " temp; echo $$temp'))
 	@if [ "$(key)" = "" ]; then exit 1; fi
 	@mkdir -p ~/.ssh && echo "$(key)" >> ~/.ssh/authorized_keys
@@ -28,16 +28,20 @@ ssh-add-pubkey: #on server
 	@chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
 	@exit 0
 
-ssh-upload: #on client
+ssh-upload:
 	$(eval server = $(shell bash -c 'read -p "Remote Server IP: " temp; echo $$temp'))
 	$(eval username = $(shell bash -c 'read -p "User: " temp; echo $$temp'))
 	if [ ! -f ~/.ssh/id_ed25519 ]; then make ssh-key; fi
 	cat ~/.ssh/id_ed25519.pub | ssh $(username)@$(server) "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
 
-ssh-disablepassword: #on server
+ssh-disablepassword:
 	sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 	sudo sed -i 's/ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/g' /etc/ssh/sshd_config
 	sudo sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+	@sudo systemctl restart ssh || sudo systemctl restart sshd
+
+ssh-enablepassword:
+	sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 	@sudo systemctl restart ssh || sudo systemctl restart sshd
 
 docker-portainer:
@@ -99,6 +103,9 @@ ansible:
 	python3 -m pip install --user ansible || python -m pip install --user ansible
 	echo "export PATH=\$${PATH}:${HOME}/.local/bin" >> ~/.bash_aliases
 	echo "export ANSIBLE_CONFIG=$(DOT)/ansible/ansible.cfg" >> ~/.bash_aliases
+	sudo adduser ansible
+	sudo usermod -aG sudo ansible || sudo usermod -aG wheel ansible
+	sudo usermod -aG ansible ${USER}
 	@echo "OK. Please source your bash_aliases."
 
 network-static-centos:
