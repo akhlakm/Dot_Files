@@ -108,6 +108,9 @@ ansible:
 	sudo usermod -aG ansible ${USER}
 	@echo "OK. Please source your bash_aliases."
 
+ansible-test:
+	ansible all -m ping
+
 network-static-centos:
 	@read -p "Please update the following file with the device name. Press Enter ..." temp
 	@editor $(DOT)/network/rhel.conf
