@@ -32,7 +32,7 @@ ssh-upload: #on client
 	$(eval server = $(shell bash -c 'read -p "Remote Server IP: " temp; echo $$temp'))
 	$(eval username = $(shell bash -c 'read -p "User: " temp; echo $$temp'))
 	if [ ! -f ~/.ssh/id_ed25519 ]; then make ssh-key; fi
-	cat ~/.ssh/id_ed25519.pub | ssh $(username)@$(server) "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+	cat ~/.ssh/id_ed25519.pub | ssh $(username)@$(server) "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
 
 ssh-disablepassword: #on server
 	sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
