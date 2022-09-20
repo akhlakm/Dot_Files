@@ -4,14 +4,12 @@
   become: true
   tags: always
   pre_tasks:
-    - name: pre-run | cache update (apt)
-      tags: always
+    - name: cache update (apt)
       apt: update_cache=yes
       changed_when: false
       when: ansible_distribution in ["Debian", "Ubuntu"]
 
-    - name: pre-run | cache update (dnf)
-      tags: always
+    - name: cache update (dnf)
       dnf: update_cache=yes
       changed_when: false
       when: ansible_distribution in ["CentOS"]
