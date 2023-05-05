@@ -169,6 +169,12 @@ if havecmd git; then
 	# checkout from stash[0]
 	alias gitcs='git checkout "stash@{0}" --'
 
+	# git ids
+	gitme() {
+		git config user.name akhlakm
+		git config user.email me@akhlakm.com
+	}
+
 else
 	echo "Git not found. Please consider installing it."
 fi
@@ -522,6 +528,7 @@ ssh-key() {
 	fi
 	cat ~/.ssh/id_ed25519.pub
 	echo "You can add this key to your github at: https://github.com/settings/keys"
+	echo "Make sure to use the SSH URL for cloning a repository, or update remote URL."
 }
 
 # upload the ed25519 ssh public key to a server
