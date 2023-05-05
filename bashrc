@@ -122,14 +122,8 @@ if havecmd make; then
 	if [[ ! -f ~/Makefile ]]; then
 		if [[ -f ~/Dot_Files/Makefile ]]; then 
 			ln -s Dot_Files/Makefile Makefile
-		else
-			echo "No Makefile found in the home directory."
-			echo "You can get it from https://github.com/akhlakm/Dot_Files"
 		fi
 	fi
-else
-	echo "Make does not exist. Attempting to install ..."
-	sudo apt install make
 fi
 
 # Git helpers
@@ -174,6 +168,13 @@ if havecmd git; then
 
 	# checkout from stash[0]
 	alias gitcs='git checkout "stash@{0}" --'
+
+	# set git id
+	gitme() {
+		git config user.name 'akhlakm'
+		git config user.email 'me@akhlakm.com'
+	}
+
 else
 	echo "Git not found. Please consider installing it."
 fi
@@ -269,12 +270,12 @@ alias l='ls -CF'
 alias cls='clear'
 
 # Set the default editor
-if havecmd kate; then
-	export EDITOR=kate
+if havecmd code; then
+	export EDITOR=code
 elif havecmd subl; then
 	export EDITOR=subl
-elif havecmd code; then
-	export EDITOR=code
+elif havecmd kate; then
+	export EDITOR=kate
 elif havecmd vim; then
 	export EDITOR=vim
 else
@@ -364,11 +365,10 @@ alias cddl='cd ~/Downloads'
 alias cddoc='cd ~/Documents'
 alias cdt='cd /tmp'
 alias cdmed='cd /media/$(whoami)'
+alias cdws='cd ~/work-Space'
 
-__test -d ~/Dropbox &&          alias cddb='cd ~/Dropbox'
-__test -d ~/data &&             alias cdd='cd ~/data'
-__test -d ~/programs &&         alias cdp='cd ~/programs'
-__test -d ~/mnt &&              alias cdm='cd ~/mnt'
+__test -d ~/Dropbox 			&&  alias cddb='cd ~/Dropbox'
+__test -d ~/mnt 				&&	alias cdm='cd ~/mnt'
 
 # Installed applications helpers
 # ---------------------------------
@@ -412,12 +412,11 @@ function open () {
 # open a jupyter lab workspace
 jlab() {
 	# check if server is running or start it
-	nc -4 -d -z -w 1 127.0.0.1 7800 &> /dev/null
+	nc -4 -d -z -w 1 127.0.0.1 8888 &> /dev/null
 	if [[ $? -ne 0 ]]; then
-		nohup jupyter lab --port=7800 --no-browser &> /tmp/jlab.log &
+		nohup jupyter lab &> /tmp/jlab.log &
 		sleep 1
 	fi
-	open "http://localhost:7800/$1"
 }
 
 # Quick google search
@@ -482,7 +481,7 @@ tellme() { sleep $1 && spd-say "$2" & }
 pls () { eval echo \$${1:-PATH} |tr : '\n'; }
 
 # add current directory to the environment path variables
-# e.g.: pla PYTHONPATH
+# e.g.: pla, pla PYTHONPATH
 pla () {
 	eval export ${1:-PATH}=`pwd`:\$${1:-PATH}
 }
@@ -513,8 +512,61 @@ fi
 echo $PASS >> ~/.passwords
 alias pass="tail -n 1 ~/.passwords"
 
+# SSH Operations
+# ---------------------------------
+
 # ssh agent for pass phrases
 alias ssha='eval $(ssh-agent) && ssh-add'
+
+# make key pair
+ssh-key() {
+	if [[ ! -f ~/.ssh/id_ed25519 ]]; then
+		ssh-keygen -t ed25519 -C ${HOSTNAME}
+		chmod 700 ~/.ssh 
+		eval $(ssh-agent) && ssh-add
+		__test -f ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+	fi
+	cat ~/.ssh/id_ed25519.pub
+	echo "You can add this key to your github at: https://github.com/settings/keys"
+}
+
+# upload the ed25519 ssh public key to a server
+ssh-upload-key() {
+	read -p "Remote Server IP: " server
+	read -p "User: " username
+	[[ -f ~/.ssh/id_ed25519 ]] || ssh-key
+	cat ~/.ssh/id_ed25519.pub | ssh ${username}@${server} "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+}
+
+# update and shutdown
+shutup() {
+    sudo apt update && sudo apt upgrade -y && sudo shutdown
+}
+
+# kopia server 
+# See http://kopia.io for details
+kopiaServer() {
+    sudo echo "Starting server"
+    sudo nohup /usr/bin/kopia server start --insecure --without-password &> ~/kopia-server.log &
+}
+
+# Install micromamba, a conda alternative
+# Helper function to install it.
+# ------------------------------
+if [[ ! -d ~/micromamba ]]; then
+	install_mamba() {
+		sudo apt install -y curl
+
+		# update the url if needed
+		curl micro.mamba.pm/install.sh | bash
+
+		export PATH="~/micromamba/bin:$PATH"
+		micromamba create -n base -c defaults
+
+		unset install_mamba
+	}
+fi
+
 
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------
@@ -551,3 +603,4 @@ if ! shopt -oq posix; then
 	. /etc/bash_completion
   fi
 fi
+
