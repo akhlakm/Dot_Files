@@ -169,12 +169,6 @@ if havecmd git; then
 	# checkout from stash[0]
 	alias gitcs='git checkout "stash@{0}" --'
 
-	# set git id
-	gitme() {
-		git config user.name 'akhlakm'
-		git config user.email 'me@akhlakm.com'
-	}
-
 else
 	echo "Git not found. Please consider installing it."
 fi

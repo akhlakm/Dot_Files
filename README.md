@@ -2,22 +2,10 @@ Tracking dot files using Git.
 
 Install:
 ```sh
-cd ~ && git clone https://github.com/akhlakm/Dot_Files.git
-```
+git clone https://github.com/akhlakm/Dot_Files.git
+cd Dot_Files
 
-For CentOS:
-```sh
-sudo ln -s ~/Dot_Files/bashrc /etc/profile.d/bashrc.sh
-```
+./install.sh bashrc
+./install.sh git
 
-For Debian:
-```sh
-ln -s ~/Dot_Files/bashrc ~/.bashrc
-```
-
-
-Run make from $HOME to list available commands.
-```sh
-cd ~
-make
 ```
