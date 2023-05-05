@@ -7,5 +7,4 @@ cd Dot_Files
 
 ./install.sh bashrc
 ./install.sh git
-
 ```
