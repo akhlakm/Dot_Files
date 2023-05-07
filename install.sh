@@ -126,5 +126,9 @@ if [[ $task == "pgadmin" ]]; then
     # update postgres password
     sudo -u postgres psql postgres -c "alter user postgres with password 'postgres';"
 
+    # setup a user role for the current ubuntu user with password as the same name
+    # sql="CREATE ROLE ${USER} WITH LOGIN PASSWORD '${USER}';"
+    # sudo -u postgres psql postgres -c "$sql"
+
     echo Done
 fi
