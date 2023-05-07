@@ -123,5 +123,8 @@ if [[ $task == "pgadmin" ]]; then
     sudo apt update
     sudo apt install pgadmin4
 
+    # update postgres password
+    sudo -u postgres psql postgres -c "alter user postgres with password 'postgres';"
+
     echo Done
 fi
