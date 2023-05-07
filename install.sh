@@ -82,3 +82,24 @@ if [[ $task == "git" ]]; then
 	source ~/.git-prompt.sh && echo "git-prompt loaded."
 fi
 
+
+## PostgreSQL
+## Check for updates: https://wiki.postgresql.org/wiki/Apt
+## ===============================================================
+if [[ $task == "postgresql" ]]; then
+
+    # install reqs
+    sudo apt install curl ca-certificates gnupg
+
+    # download key
+    curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
+
+    # add to apt sources list
+    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+    # update and install
+    sudo apt update
+    sudo apt install postgresql-14
+
+    echo Done
+fi
