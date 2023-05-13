@@ -26,6 +26,8 @@ ENV PATH="${PATH}:/home/user/.local/bin"
 RUN curl micro.mamba.pm/install.sh | bash
 
 RUN mkdir -p /home/user/src
+RUN mkdir -p /home/user/env
+
 WORKDIR /home/user/src
 
 COPY environment.yml            /home/user/environment.yml

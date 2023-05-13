@@ -1,0 +1,11 @@
+# List additional channels and packages here
+# This will be setup by micromamba
+
+name: nlp
+channels:
+  - conda-forge
+
+dependencies:
+  - python
+  - pytorch-gpu
+  - jupyterlab
