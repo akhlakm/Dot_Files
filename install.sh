@@ -3,7 +3,7 @@
 version="2023.05a"
 
 # path to dropbox dotfiles, update this if needed
-dbDots=~/Dropbox/common/dotfiles
+dbDots=/home/hdd/Dropbox/common/dotfiles
 
 echo
 echo "Linux installation script (v$version) by Akhlak Mahmood"
