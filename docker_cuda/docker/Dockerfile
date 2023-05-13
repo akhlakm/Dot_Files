@@ -1,5 +1,6 @@
 # Available versions: https://hub.docker.com/r/nvidia/cuda/tags
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+# Make sure to choose the devel version for nvcc and other tools.
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 RUN apt-get update && apt-get install -y --no-install-recommends \
          build-essential \
          gfortran \
