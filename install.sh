@@ -31,7 +31,7 @@ task=$1; [[ -n $task ]] || die 1 "Please specify a task: $0 <task>"
 
 ## BASHRC
 ## ===============================================================
-if [[ $task == "bashrc" ]]; then
+bashrc(){
 
     if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
         # debian
@@ -61,14 +61,14 @@ if [[ $task == "bashrc" ]]; then
             echo "Symlinked bash_aliases"
         fi
     fi
-fi 
+}
 
 ## git
 ## ===============================================================
-if [[ $task == "git" ]]; then
-    git config user.name 'akhlakm'
+git() {
+    git config --global user.name 'akhlakm'
     read -p "Git[hub] user.email? " email
-	git config user.email $email
+	git config --global user.email $email
 
     if [[ ! -f ~/.git-prompt.sh ]]; then
 		# download and use the official one
@@ -80,7 +80,7 @@ if [[ $task == "git" ]]; then
 		fi
 	fi
 	source ~/.git-prompt.sh && echo "git-prompt loaded."
-fi
+}
 
 
 ## PostgreSQL
@@ -132,3 +132,18 @@ if [[ $task == "pgadmin" ]]; then
 
     echo Done
 fi
+
+
+docker() {
+    sudo apt install -y curl
+    sudo curl https://get.docker.com | bash
+
+    # Add current user to the docker group
+    sudo groupadd docker || echo OK
+    sudo usermod -aG docker $USER
+    newgrp docker
+    echo "Done!"
+    docker ps
+}
+
+"$@"
