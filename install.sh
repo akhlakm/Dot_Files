@@ -146,4 +146,17 @@ docker() {
     docker ps
 }
 
+
+swapfile() {
+    size=20G
+    loc=/home/swapfile
+    sudo fallocate -l $size $loc
+    sudo chmod 600 $loc
+    sudo mkswap $loc
+    sudo swapon $loc
+    # make permanent
+    # echo "$loc none swap sw 0 0" | sudo tee -a /etc/fstab
+}
+
+
 "$@"
