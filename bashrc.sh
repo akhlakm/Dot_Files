@@ -249,7 +249,7 @@ xterm_setcolor $green $GREEN $BLUE
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
 	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-	alias ls='ls --color=auto -lh'
+	alias ls='ls --color=auto -tovh'
 	alias dir='dir --color=auto'
 	alias vdir='vdir --color=auto'
 
@@ -317,7 +317,6 @@ alias gp='ps aux | grep'
 
 # Copy with a progress bar, limit speed to 50mbps
 alias rsync2="rsync -avrRh --info=progress2"
-alias rsynclimit="rsync -avhrR --progress --bwlimit=50000"
 
 # Navigation helpers
 # ---------------------------------
