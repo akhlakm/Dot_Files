@@ -146,6 +146,17 @@ docker() {
     docker ps
 }
 
+nvidia_docker() {
+    # sudo ./install.sh nvidia_docker
+    #
+    apt install -y curl
+    curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
+    curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu22.04/nvidia-docker.list > /etc/apt/sources.list.d/nvidia-docker.list
+    apt update
+    apt install nvidia-container-toolkit
+    systemctl restart docker
+    echo "Done!"
+}
 
 swapfile() {
     size=40G
