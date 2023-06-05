@@ -29,3 +29,5 @@ task=$1; [[ -n $task ]] || die 1 "Please specify a task: $0 <task>"
 download() {
     git clone --branch stable --depth 5 https://github.com/lammps/lammps.git lammps_official
 }
+
+"$@"
