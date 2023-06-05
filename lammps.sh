@@ -31,3 +31,13 @@ download() {
 }
 
 "$@"
+
+build() {
+    module load cpu
+    module load gcc cmake
+    module load ffmpeg fftw openmpi openblas
+
+    cmake ../cmake/ -C ../cmake/presets/mspin.cmake
+    
+    echo "please run 'make -j4'"
+}
