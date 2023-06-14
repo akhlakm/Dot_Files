@@ -37,7 +37,7 @@ build() {
     module load gcc cmake
     module load ffmpeg fftw openmpi openblas
 
-    cmake ../cmake/ -C ../cmake/presets/mspin.cmake
+    cmake ../cmake/ -C ../cmake/presets/user.cmake
     
     echo "please run 'make -j4'"
 }
