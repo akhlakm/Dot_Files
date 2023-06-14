@@ -424,6 +424,11 @@ google() {
 	open "https://www.google.com/search?q=$@"
 }
 
+# Ignore a dropbox folder
+dbignore() {
+	attr -s com.dropbox.ignored -V 1 "$1"
+}
+
 # usage: localhost <path> <port>
 localhost() {
 	local port=${2:-8000}
