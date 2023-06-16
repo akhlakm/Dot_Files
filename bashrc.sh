@@ -315,8 +315,8 @@ alias gh='history | grep'
 # grep running processes
 alias gp='ps aux | grep'
 
-# Copy with a progress bar, limit speed to 50mbps
-alias rsync2="rsync -avrRh --info=progress2"
+# Copy with a progress bar and summary stats
+alias rsync2="rsync -avrRh --info=progress2 --stats"
 
 # Navigation helpers
 # ---------------------------------
