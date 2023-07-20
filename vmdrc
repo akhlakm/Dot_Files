@@ -1,0 +1,511 @@
+source /home/hdd/Dropbox/common/scripts/vmd_scripts/movie/makemovie.tcl
+source /home/hdd/Dropbox/common/scripts/vmd_scripts/save_state.tcl
+
+# turn on lights 0 and 1
+light 0 on
+light 1 on
+light 2 off
+light 3 off
+
+#Create material for gold
+material add LowTransperent
+material change ambient   LowTransperent 0.000
+material change diffuse   LowTransperent 0.850
+material change specular  LowTransperent 0.440
+material change shininess LowTransperent 0.440
+material change opacity   LowTransperent 0.200
+
+# Create material for terminal nitrogen and carbon atoms
+material add AOEnd
+material change ambient   AOEnd 0.000
+material change diffuse   AOEnd 0.850
+material change specular  AOEnd 0.200
+material change shininess AOEnd 0.400
+material change opacity   AOEnd 0.900
+
+# Create eggshell color for terminal C and H
+color add Eggshell
+color change rgb 90 90 90
+
+# set display defaults
+display projection orthographic
+#display backgroundgradient on
+color Display {Background} white
+display depthcue off
+display antialias on
+display ambientocclusion off
+
+# position the stage and axes
+# axes location lowerleft
+axes location off
+stage location off
+
+# position and turn on menus
+menu main     move 445  125
+menu display  move 395  30
+menu graphics move 600  420
+menu color    move 125  225
+menu files    move 425  825
+menu labels   move 125  525
+menu render   move 125  525
+
+menu main       on
+# menu display  on
+menu graphics   on
+#menu color     on
+#menu labels    on
+#menu render    on
+menu files      off
+menu tkcon on
+menu tkcon move 930 725
+tkcon font monospace 16
+
+global env 
+# set env(VMDFULLSCREEN) 1
+display resize 1040 900
+# start the scene a-rockin'
+# rock y by 1
+
+proc con {} {
+    menu tkcon on
+    menu tkcon move 930 725
+    tkcon font monospace 16
+}
+
+
+# Clear all existing configurations
+proc clearallreps {molid} { 
+	set numrep [molinfo top get numreps]
+	for {set i 0} {$i < $numrep} {incr i} {mol delrep 0 $molid}
+}
+
+# Smooth frames for movie-making
+proc smoothall {molid window} {
+	set numrep [molinfo top get numreps]
+	for {set i 0} {$i < $numrep} {incr i} {mol smoothrep $molid $i $window}
+}
+
+# Turn on selection/color updates for a given representation.
+proc updaterep {molid} {
+	set numrep [molinfo $ molid get numreps]
+	mol selupdate $numrep $molid 1
+	mol colupdate $numrep $molid 1
+}
+
+proc countcontacts {molid cutoff} {
+	set molid top
+	set mol [molinfo $molid]
+	set sel [atomselect $mol {name OP1 and within $cutoff of type nz n4 nx}]
+	set frames [molinfo $mol get numframes]
+	set fp [open "contact_count.dat" w ]
+	for {set i 0} {$i < $frames} {incr i} {
+		$sel frame $i
+		$sel update
+		set n [$sel num]
+		puts $fp "$i $n"
+	}
+	$sel delete
+	close $fp
+	unset mol sel frames fp i n
+}
+
+proc betweenvector {sel1 sel2} {
+	set vec1 [measure center $sel1]
+	set vec2 [measure center $sel2]
+	set bwvector [vecsub $vec1 $vec2]
+	return $bwvector
+}
+
+# Built-in command is [measure center $selection [weight mass]]
+proc geomcenter {selection} {
+        # set the geometrical center to 0
+        set gc [veczero]
+        # [$selection get {x y z}] returns a list of {x y z} 
+        #    values (one per atoms) so get each term one by one
+        foreach coord [$selection get {x y z}] {
+           # sum up the coordinates
+           set gc [vecadd $gc $coord]
+        }
+        # and scale by the inverse of the number of atoms
+        return [vecscale [expr 1.0 /[$selection num]] $gc]
+}
+
+proc showAtomAtCenter {selection_criteria} {
+    set sel [atomselect top $selection_criteria]
+    set com [measure center $sel]
+    set x [lindex $com 0]
+    set y [lindex $com 1]
+    set z [lindex $com 2]
+    set center_atom "sqr(x-$x) + sqr(y-$y) + sqr(z - $z) < 5"
+    
+    # clear screen
+    puts "Selection criteria: '$center_atom' "
+    clearallreps top
+
+    mol selection $selection_criteria
+    mol representation lines
+    mol addrep top
+
+    mol selection $center_atom
+    mol representation VDW 1.000000 20.000000
+    mol color Name
+    mol addrep top
+
+    set sel [atomselect top $center_atom]
+    set ids [$sel get index]
+    puts "Selected atoms: $ids"
+}
+
+proc get_total_charge {sel} {
+    return [eval "vecadd [$sel get charge]"]
+}
+
+proc boxsize {} {
+    set box [measure minmax [atomselect top all]]
+    set rgyr [measure rgyr [atomselect top all]]
+    set size [vecsub [lindex $box 1] [lindex $box 0]]
+
+    puts "Box Size: $size"
+    puts "Radius of gyration: $rgyr"
+}
+
+proc pbcbox {bs} {
+    pbc set "$bs" -all -molid top
+    pbc box
+}
+
+proc highres_resize {} {
+  set ds [display get size]
+  set cw [lindex $ds 0]
+  set ch [lindex $ds 1]
+
+  set multf [expr {3240 / $ch}]
+  puts "Display resize factor: $multf"
+
+  display resize [expr {$cw * $multf} {$ch * $multf}]
+
+  # check if the resize was successful
+  set ds [display get size]
+  set nw [lindex $ds 0]
+  set nh [lindex $ds 1]
+  puts "Window Resized: $nw by $nh"
+  if {$nh < 3230} {
+    puts "Error resizing the window. Please move the window outside the visible screen to allow for larger window size."
+    return 0
+  }
+
+  return 1
+}
+
+user add key 1 {
+	display resize 1060 1060
+}
+
+user add key 2 {
+	display resize 1280 720
+}
+
+user add key 3 {
+	display resize 1920 1080
+}
+
+user add key p {
+	pbc box -color black
+}
+
+user add key o {
+	pbc box none
+}
+
+# Averaging of trajectory with 5-frame window
+user add key 5 {
+	smoothall top 5
+}
+
+# Periodic image hotkeys.
+user add key 6 {
+	set numrep [molinfo top get numreps]
+	for {set i 0} {$i < $numrep} {incr i} {mol showperiodic top $i xy
+	mol numperiodic top $i 1}
+}
+user add key 7 {
+	set numrep [molinfo top get numreps]
+	for {set i 0} {$i < $numrep} {incr i} {mol showperiodic top $i z
+	mol numperiodic top $i 1}
+}
+user add key 8 {
+	set numrep [molinfo top get numreps]
+	for {set i 0} {$i < $numrep} {incr i} {mol showperiodic top $i xyz
+	mol numperiodic top $i 1}
+}
+
+# Increase resolution of all reps.
+user add key h {
+	set numrep [molinfo top get numreps]
+	for {set i 0} {$i < $numrep} {incr i} {mol smoothrep $molid $i}
+}
+
+user add key v {
+### vdW for All Atoms
+	   clearallreps top
+    mol selection all
+    mol representation VDW 1.000000 20.000000
+    mol color Name
+    mol material Opaque
+    mol addrep top
+ }
+
+# Not Solvents
+user add key b {
+	clearallreps top
+
+    mol selection "not (resname EtO Hx1 MeO)"
+    mol addrep top
+}
+
+### CPK for All Atoms
+user add key f {
+  clearallreps top
+  mol selection all
+  mol representation CPK 1.000000 0.500000 10.000000 10.000000
+  mol color Name
+  mol material Opaque
+  mol addrep top
+
+}
+
+### Delete all representations and set all to LINES
+user add key w {
+  graphics top delete all
+  clearallreps top 
+
+	mol representation Lines 1.000000
+	mol color Name
+	mol selection {all}
+	mol material Opaque
+	mol addrep top
+}
+
+
+# Center topology (not by mass)
+user add key c {
+	set num_frames [molinfo top get numframes]
+	set sel_all [atomselect top "all"]
+	set sel_center [atomselect top "fragment 0"]
+	for {set i 0} {$i < $num_frames} {incr i 1} {
+	  animate goto $i
+	  $sel_all moveby [vecinvert [measure center $sel_center]]
+	}
+	$sel_all delete
+	$sel_center delete
+}
+
+# =============================================================
+
+user add key u {
+  # pbc wrap -compound res -all -center origin
+  # pbc wrap -compound res -all -center com -centersel "resname FeO"
+  pbc wrap -compound res -all -center com
+}
+
+proc distanceByIndex {ind1 ind2} {
+  set start [lindex [[atomselect top "index $ind1"] get {x y z}] 0]
+  set end [lindex [[atomselect top "index $ind2"] get {x y z}] 0]
+  return [veclength [vecsub $end $start]]
+}
+
+proc comDistance {mask1 mask2} {
+  set sel1 [atomselect top "$mask1"]
+  set sel2 [atomselect top "$mask2"]
+
+  set com1 [measure center $sel1]
+  set com2 [measure center $sel2]
+
+  return [veclength [vecsub $com2 $com1]]
+}
+
+# highlight a selection
+# set color as yellow
+proc high {sel} {
+  mol representation CPK 1.500000 0.900000 20.000000 20.000000
+  mol color ColorID 4
+  mol selection "$sel"
+  mol material Opaque
+  mol addrep top
+}
+
+# Silica Dye in Water
+# ===================================================================================
+
+user add key a {
+  clearallreps top
+  mol representation BONDS 0.100000 7.000000
+  mol color Name
+  mol selection {resname WAT}
+  mol material Glass3
+  mol addrep top
+
+  mol representation CPK 1.000000 0.900000 12.00000 12.00000
+  mol color Name
+  mol selection {not resname WAT}
+  mol material Opaque
+  mol addrep top
+
+  mol representation CPK 2.500000 1.900000 12.00000 12.00000
+  mol color Name
+  mol selection {resname SiO}
+  mol material Opaque
+  mol addrep top
+
+  pbc box
+}
+
+# Nanozyme
+# ===================================================================================
+
+user add key m {
+  mol representation VDW 1.000000 32.000000
+  mol color ColorID 4
+  mol selection {type Au}
+  mol material AOChalky
+  mol addrep top
+
+  mol representation CPK 1.000000 0.900000 32.000000 32.000000
+  mol color Name
+  mol selection {resname TTM ARG Gld}
+  mol material Opaque
+  mol addrep top
+}
+
+
+# Silica Dendrimer, P16S16
+# ===================================================================================
+set NPS {(not resname WAT)}
+
+user add key d {
+global NPS
+
+puts "$NPS and (resname \"NK.*\" \"K.*\")"
+
+mol representation CPK 1.100000 0.700000 37.000000 37.000000
+mol color ColorID 22
+mol selection "$NPS and (resname \"NK.*\" \"K.*\")"
+mol material Opaque
+mol addrep top
+
+mol representation CPK 1.300000 0.600000 37.000000 37.000000
+mol color ColorID 11
+mol selection "$NPS and (resname \"IT.*\")"
+mol material Opaque
+mol addrep top
+
+mol representation CPK 1.000000 0.300000 32.000000 32.000000
+mol color ColorID 4
+mol selection "$NPS and (resname \"IT.*\" and type o os ss)"
+mol material Opaque
+mol addrep top
+
+mol representation CPK 1.300000 0.700000 32.000000 32.000000
+mol color ColorID 17
+mol selection "$NPS and (within 2.4 of (resname \"IT.*\" and type o os ss))"
+mol material Opaque
+mol addrep top
+
+mol representation CPK 1.300000 0.800000 32.000000 32.000000
+mol color ColorID 25
+mol selection "$NPS and (resname NK1)"
+mol material Opaque
+mol addrep top
+
+mol representation CPK 1.500000 0.900000 32.000000 32.000000
+mol color ColorID 0
+mol selection "$NPS and (type n4 or (type hn and within 2 of type n4))"
+mol material Opaque
+mol addrep top
+
+mol representation VDW 0.400000 32.000000
+mol color ColorID 1
+mol selection "$NPS and (type sy or (type o and within 2 of type sy))"
+mol material Opaque
+mol addrep top
+
+mol representation VDW 0.900000 12.000000
+mol color Name
+mol selection {fragment 17 35}
+mol material Glass2
+mol addrep top
+}
+
+# HETEROAGGREGATION
+# =====================================================================
+
+# FeNP OLM, OLA
+
+user add key s {
+
+  mol representation VDW 1.000000 12.000000
+  mol color ColorID 29
+  mol selection {type O}
+  mol material Opaque
+  mol addrep top
+
+  mol representation VDW 0.400000 12.000000
+  mol color ColorID 32
+  mol selection {type n3 hn}
+  mol material Opaque
+  mol addrep top
+
+  mol representation CPK 1.000000 0.900000 12.000000 12.000000
+  mol color Name
+  mol selection {resname Olm OLA Ola}
+  mol material Opaque
+  mol addrep top
+
+  mol representation VDW 1.000000 12.000000
+  mol color ColorID 23
+  mol selection {type Ft or type Fm}
+  mol material Opaque
+  mol addrep top
+
+}
+
+# Silica Surface
+
+user add key o {
+  mol representation VDW 0.500000 12.000000
+  mol color Name
+  mol selection {resname SiO}
+  mol material Opaque
+  mol addrep top
+}
+
+# Solvents Glass
+user add key n {
+  mol representation BONDS 0.100000 12.000000
+  mol color Name
+  mol selection {resname EtO Hx1 WAT ClF hex Tol}
+  mol material Glass3
+  mol addrep top
+}
+
+# Bare np with ethanol
+user add key d {
+  clearallreps top
+
+  mol representation VDW 1.00000 12.000000
+  mol color Charge
+  mol selection {resname FeO}
+  mol material Opaque
+  mol addrep top
+
+  mol representation LICORICE 0.300000 12.000000 12.00000
+  mol color Charge
+  mol selection {resname EtO Hx1 WAT ClF hex Tol}
+  mol material Opaque
+  mol addrep top
+  
+  smoothall top 5
+  display depthcue on
+
+}
+

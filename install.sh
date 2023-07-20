@@ -191,4 +191,9 @@ spotify() {
     sudo apt install spotify-client
 }
 
+vmd(){
+    sudo mv ~/.vmdrc ~/.vmdrc.backup &> /dev/null
+    sudo ln -s $CWD/vmdrc ~/.vmdrc
+}
+
 "$@"
