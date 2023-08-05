@@ -189,7 +189,7 @@ __exit_code() {
 	if [[ exit_code -eq 0 ]]; then
 		echo ''
 	else
-		echo -e " ${RED}?${exit_code}${NC}"
+		echo " ?${exit_code}"
 	fi
 }
 
