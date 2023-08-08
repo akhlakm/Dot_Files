@@ -148,4 +148,12 @@ fonts() {
     fc-cache -f -v
 }
 
+matplotlib() {
+    echo "$CWD/matplotlib.mplstyle <-- ~/matplotlib.mplstyle"
+    ln -s $CWD/matplotlib.mplstyle ~/matplotlib.mplstyle
+    echo OK
+    echo
+    echo "Please run '$0 fonts' to install the required fonts."
+}
+
 "$@"
