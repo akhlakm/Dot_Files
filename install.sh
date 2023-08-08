@@ -35,12 +35,12 @@ bashrc(){
 
     if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
         # debian
-        sudo mv ~/.bashrc ~/.bashrc.backup
-        sudo ln -s $CWD/bashrc.sh ~/.bashrc
+        mv ~/.bashrc ~/.bashrc.backup
+        ln -s $CWD/bashrc.sh ~/.bashrc
     else
         # centos
-        sudo mv /etc/profile.d/bashrc.sh /etc/profile.d/bashrc.sh.backup
-        sudo ln -s $CWD/bashrc.sh /etc/profile.d/bashrc.sh
+        mv /etc/profile.d/bashrc.sh /etc/profile.d/bashrc.sh.backup
+        ln -s $CWD/bashrc.sh /etc/profile.d/bashrc.sh
     fi
     echo "Symlinked $CWD/bashrc.sh, please restart session to take effect."
 
