@@ -27,10 +27,6 @@ die() {
 	exit $1
 }
 
-task=$1; [[ -n $task ]] || die 1 "Please specify a task: $0 <task>"
-
-## BASHRC
-## ===============================================================
 bashrc(){
 
     if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
@@ -63,8 +59,6 @@ bashrc(){
     fi
 }
 
-## git
-## ===============================================================
 git() {
     git config --global user.name 'akhlakm'
     read -p "Git[hub] user.email? " email
