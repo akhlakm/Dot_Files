@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="2023.05a"
+version="2023.08a"
 
 # path to dropbox dotfiles, update this if needed
 dbDots=/home/data/Dropbox/common/dotfiles
@@ -142,6 +142,16 @@ spotify() {
 vmd(){
     sudo mv ~/.vmdrc ~/.vmdrc.backup &> /dev/null
     sudo ln -s $CWD/vmdrc ~/.vmdrc
+}
+
+fonts() {
+    USER_FONTS_DIR=~/.fonts
+    mkdir -p $USER_FONTS_DIR
+    for ffile in fonts/*; do
+        echo -e "$(realpath $ffile)   <-- $USER_FONTS_DIR/$(basename $ffile)"
+        ln -s $(realpath $ffile) "$USER_FONTS_DIR/$(basename $ffile)"
+    done
+    fc-cache -f -v
 }
 
 "$@"
