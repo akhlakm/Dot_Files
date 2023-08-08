@@ -91,12 +91,12 @@ docker() {
 nvidia_docker() {
     # sudo ./install.sh nvidia_docker
     #
-    apt install -y curl
+    sudo apt install -y curl
     curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
     curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu22.04/nvidia-docker.list > /etc/apt/sources.list.d/nvidia-docker.list
-    apt update
-    apt install nvidia-container-toolkit
-    systemctl restart docker
+    sudo apt update
+    sudo apt install nvidia-container-toolkit
+    sudo systemctl restart docker
     echo "Done!"
 }
 
@@ -114,10 +114,9 @@ swapfile() {
 }
 
 miniconda() {
-    sudo apt install curl
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
     bash Miniconda3-latest-Linux-x86_64.sh
-    /bin/rm Miniconda3-latest-Linux-x86_64.sh
+    # /bin/rm Miniconda3-latest-Linux-x86_64.sh
     source ~/.bashrc
     conda --version
     conda update -n base conda
@@ -134,8 +133,8 @@ spotify() {
 }
 
 vmd(){
-    sudo mv ~/.vmdrc ~/.vmdrc.backup &> /dev/null
-    sudo ln -s $CWD/vmdrc ~/.vmdrc
+    mv ~/.vmdrc ~/.vmdrc.backup &> /dev/null
+    ln -s $CWD/vmdrc ~/.vmdrc
 }
 
 fonts() {
@@ -156,4 +155,22 @@ matplotlib() {
     echo "Please run '$0 fonts' to install the required fonts."
 }
 
-"$@"
+
+if [[ "$#" -lt 1 ]]; then
+
+    echo -e "USAGE: $0 <command> [options...]\n"
+
+    echo -e "\t bashrc - Install bashrc files."
+    echo -e "\t git - Setup git username and shell hooks."
+    echo -e "\t docker - Install docker. (SU)"
+    echo -e "\t nvidia_docker - Install GPU support for docker. (SU)"
+    echo -e "\t swapfile - Setup swapfile. (SU)"
+    echo -e "\t vmd - Setup vmdrc file."
+    echo -e "\t fonts - Install custom user fonts."
+    echo -e "\t matplotlib - Setup matplotlib style file."
+    echo -e "\t spotify - Setup spotify-client repo and install. (SU)"
+    echo
+
+else
+    "$@"
+fi
