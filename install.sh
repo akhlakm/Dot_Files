@@ -145,6 +145,7 @@ fonts() {
         ln -s $(realpath $ffile) "$USER_FONTS_DIR/$(basename $ffile)"
     done
     fc-cache -f -v
+    rm ~/.cache/matplotlib/*
 }
 
 matplotlib() {
