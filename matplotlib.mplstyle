@@ -96,8 +96,8 @@ xtick.labelsize :   small
 ytick.labelsize :   small
 
 legend.fontsize :       medium
-axes.titlesize :        medium
-axes.labelsize :        medium    # Possible bug always uses font.size for this.
+axes.titlesize :        large    # title size  
+axes.labelsize :        large    # size of the x and y labels
 
 legend.title_fontsize : large
 figure.titlesize:       large     # size of the figure title (``Figure.suptitle()``)
