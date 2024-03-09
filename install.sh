@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-version="2023.08a"
+version="2024.03a"
 
 # path to dropbox dotfiles, update this if needed
 dbDots=/home/data/Dropbox/common/dotfiles
 
 echo
-echo "Linux installation script (v$version) by Akhlak Mahmood"
+echo "Linux/MacOS installation script (v$version) by Akhlak Mahmood"
 echo
 
 ## INITIALIZATION
