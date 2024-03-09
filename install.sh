@@ -181,6 +181,10 @@ neovim() {
 		mv nvim.appimage ~/.local/bin/nvim
 
 	fi
+
+	# configuration
+	mkdir -p ~/.config
+	ln -s $CWD/neovim ~/.config/nvim
 }
 
 if [[ "$#" -lt 1 ]]; then
