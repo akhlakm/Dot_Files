@@ -169,6 +169,20 @@ matplotlib() {
 }
 
 
+neovim() {
+	if [[ $(uname -s) == "Darwin" ]]; then
+		# MacOS
+		brew install neovim
+	else
+		# Linux
+		wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+		chmod +x nvim.appimage
+		mkdir -p ~/.local/bin
+		mv nvim.appimage ~/.local/bin/nvim
+
+	fi
+}
+
 if [[ "$#" -lt 1 ]]; then
 
     echo -e "USAGE: $0 <command> [options...]\n"
@@ -182,6 +196,7 @@ if [[ "$#" -lt 1 ]]; then
     echo -e "\t fonts - Install custom user fonts."
     echo -e "\t matplotlib - Setup matplotlib style file."
     echo -e "\t spotify - Setup spotify-client repo and install. (SU)"
+    echo -e "\t neovim - Setup and install neovim."
     echo
 
 else
