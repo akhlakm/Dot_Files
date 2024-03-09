@@ -582,30 +582,7 @@ shutup() {
     sudo apt update && sudo apt upgrade -y && sudo shutdown
 }
 
-# kopia server 
-# See http://kopia.io for details
-kopiaServer() {
-    sudo echo "Starting server"
-    sudo nohup /usr/bin/kopia server start --insecure --without-password &> ~/kopia-server.log &
-}
-
-# Install micromamba, a conda alternative
-# Helper function to install it.
-# ------------------------------
-if [[ ! -d ~/micromamba ]]; then
-	install_mamba() {
-		sudo apt install -y curl
-
-		# update the url if needed
-		curl micro.mamba.pm/install.sh | bash
-
-		export PATH="~/micromamba/bin:$PATH"
-		micromamba create -n base -c defaults
-
-		unset install_mamba
-	}
-fi
-
+CONDAHOME=~
 
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------
@@ -624,9 +601,7 @@ else
 
 # xterm_setcolor \$green \$RED
 
-# If you have a backup in Dropbox, create a symlink. Examples -
-# sudo ln -s ~/Dropbox/dotfiles/work_aliases ~/.bash_aliases
-# sudo ln -s ~/Dropbox/dotfiles/home_aliases ~/.bash_aliases
+# CONDAHOME=~
 
 EOF
 	vi ~/.bash_aliases
@@ -643,19 +618,20 @@ if ! shopt -oq posix; then
   fi
 fi
 
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/akhlak/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# Set Conda init. Update CONDAHOME from bash_aliases if necessary.
+__conda_setup="$('$CONDAHOME/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/akhlak/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/akhlak/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "$CONDAHOME/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$CONDAHOME/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/akhlak/miniconda3/bin:$PATH"
+        export PATH="$CONDAHOME/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
-# <<< conda initialize <<<
 
+# Works if NVM is installed (for node.js).
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
