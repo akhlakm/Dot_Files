@@ -29,6 +29,8 @@ require("lazy").setup({
 
 	require("kickstart/plugins/neotree"),
 
+	require("kickstart.plugins.neogit"),
+
 	require("kickstart/plugins/gitsigns"),
 
 	require("kickstart/plugins/which-key"),
