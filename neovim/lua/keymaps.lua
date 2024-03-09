@@ -34,6 +34,15 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+-- Keybinds to make tab navigation easier.
+--  Use CTRL+<hjkl> to switch between tabs
+--
+--  See `:help tabpage` for a list of all tab commands
+vim.keymap.set("n", "<C-left>", "<cmd>tabprevious<CR>", { desc = "Move focus to the left tab" })
+vim.keymap.set("n", "<C-right>", "<cmd>tabNext<CR>", { desc = "Move focus to the right tab" })
+vim.keymap.set("n", "<C-up>", "<cmd>tabnew<CR>", { desc = "Move focus to the lower tab" })
+vim.keymap.set("n", "<C-down>", "<cmd>tabclose<CR>", { desc = "Move focus to the upper tab" })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
