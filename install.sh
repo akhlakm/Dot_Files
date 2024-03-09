@@ -65,6 +65,10 @@ bashrc(){
             echo "Symlinked bash_aliases"
         fi
     fi
+
+    # Wezterm config
+    ln -s $CWD/wezterm/wezterm.lua ~/.wezterm.lua
+
 }
 
 git() {

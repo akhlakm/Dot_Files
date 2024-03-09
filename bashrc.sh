@@ -390,6 +390,9 @@ if havecmd git; then alias gitconfig='${EDITOR} ~/.gitconfig'; fi
 # source bashrc
 alias src='. ~/.bashrc'
 
+# wezterm config
+alias wezrc='${EDITOR} ~/.wezterm.lua'
+
 # frequently used cd
 alias cddl='cd ~/Downloads'
 alias cddoc='cd ~/Documents'
