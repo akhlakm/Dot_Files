@@ -114,7 +114,10 @@ if [[ $(uname -s) == "Darwin" ]]; then
 	# tr error
 	export LC_CTYPE=C
 
-
+	# colors
+	export CLICOLOR=1
+	alias ls="ls -G -tovh"
+	alias ll="ls -G -lah"
 fi
 
 
