@@ -28,8 +28,12 @@ die() {
 }
 
 bashrc(){
-
-    if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
+    if [[ $(uname -s) == "Darwin" ]]; then
+	# mac
+	echo "MacOS detected."
+	mv ~/.bashrc ~/.bashrc.backup
+	ln -s $CWD/bashrc.sh ~/.bashrc
+    elif [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
         # debian
         mv ~/.bashrc ~/.bashrc.backup
         ln -s $CWD/bashrc.sh ~/.bashrc

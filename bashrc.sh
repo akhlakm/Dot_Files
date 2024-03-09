@@ -98,6 +98,27 @@ havecmd() { type "$1" &> /dev/null; }
 # the `test` may get overwritten
 alias __test=$(which test)
 
+
+# MacOS specific items
+# ------------------------------
+if [[ $(uname -s) == "Darwin" ]]; then
+	# Homebrew
+	if ! havecmd brew; then
+		if [[ -f /opt/homebrew/bin/brew ]]; then
+			eval "$(/opt/homebrew/bin/brew shellenv)"
+		else
+			echo "Homebrew not found, please consider installing it."
+		fi
+	fi
+
+	# tr error
+	export LC_CTYPE=C
+
+
+fi
+
+
+
 # Allows you to see repository status in your prompt.
 # Helper function to install it.
 # ------------------------------
@@ -270,7 +291,9 @@ alias l='ls -CF'
 alias cls='clear'
 
 # Set the default editor
-if havecmd code; then
+if havecmd nvim; then
+	export EDITOR=nvim
+elif havecmd code; then
 	export EDITOR=code
 elif havecmd subl; then
 	export EDITOR=subl
