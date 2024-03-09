@@ -102,6 +102,8 @@ alias __test=$(which test)
 # MacOS specific items
 # ------------------------------
 if [[ $(uname -s) == "Darwin" ]]; then
+	export BASH_SILENCE_DEPRECATION_WARNING=1
+
 	# Homebrew
 	if ! havecmd brew; then
 		if [[ -f /opt/homebrew/bin/brew ]]; then
@@ -369,6 +371,9 @@ cd() {
 alias d='dirs -v'
 alias b='pushd +1'
 alias p='pwd'
+
+# path to dotfiles
+alias cddot="cd $(dirname $(realpath ~/.bashrc))"
 
 # case insensitive search inside current directory
 search() {

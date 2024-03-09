@@ -33,6 +33,10 @@ bashrc(){
 	echo "MacOS detected."
 	mv ~/.bashrc ~/.bashrc.backup
 	ln -s $CWD/bashrc.sh ~/.bashrc
+
+	# on mac, .bash_profile is loaded in login shell
+	echo "source ~/.bashrc" >> ~/.bash_profile
+
     elif [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
         # debian
         mv ~/.bashrc ~/.bashrc.backup
