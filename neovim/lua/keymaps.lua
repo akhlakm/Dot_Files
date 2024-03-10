@@ -69,4 +69,7 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 -- Toggle NeoTree
 vim.keymap.set("n", "<C-b>", "<Cmd>Neotree toggle<CR>")
 
+-- Escape insert mode using jk
+vim.keymap.set("i", "jk", "<Esc>", { desc = "Use jk key combination to escape the insert mode" })
+
 -- vim: ts=2 sts=2 sw=2 et
