@@ -23,19 +23,19 @@ nocmd() {
         ex=$?; [[ $ex -ne 0 ]] || return 1
 }
 die() {
-	echo "ERROR - $2"
-	exit $1
+        echo "ERROR - $2"
+        exit $1
 }
 
 bashrc(){
     if [[ $(uname -s) == "Darwin" ]]; then
-	# mac
-	echo "MacOS detected."
-	mv ~/.bashrc ~/.bashrc.backup
-	ln -s $CWD/bashrc.sh ~/.bashrc
+        # mac
+        echo "MacOS detected."
+        mv ~/.bashrc ~/.bashrc.backup
+        ln -s $CWD/bashrc.sh ~/.bashrc
 
-	# on mac, .bash_profile is loaded in login shell
-	echo "source ~/.bashrc" >> ~/.bash_profile
+        # on mac, .bash_profile is loaded in login shell
+        echo "source ~/.bashrc" >> ~/.bash_profile
 
     elif [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
         # debian
@@ -74,18 +74,18 @@ bashrc(){
 git() {
     git config --global user.name 'akhlakm'
     read -p "Git[hub] user.email? " email
-	git config --global user.email $email
+        git config --global user.email $email
 
     if [[ ! -f ~/.git-prompt.sh ]]; then
-		# download and use the official one
-		echo "Downloading git-prompt ..."
-		if havecmd wget; then
-			wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
-		elif havecmd curl; then
-			curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > ~/.git-prompt.sh
-		fi
-	fi
-	source ~/.git-prompt.sh && echo "git-prompt loaded."
+                # download and use the official one
+                echo "Downloading git-prompt ..."
+                if havecmd wget; then
+                        wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+                elif havecmd curl; then
+                        curl "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > ~/.git-prompt.sh
+                fi
+        fi
+        source ~/.git-prompt.sh && echo "git-prompt loaded."
 }
 
 docker() {
@@ -170,21 +170,21 @@ matplotlib() {
 
 
 neovim() {
-	if [[ $(uname -s) == "Darwin" ]]; then
-		# MacOS
-		brew install neovim
-	else
-		# Linux
-		wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-		chmod +x nvim.appimage
-		mkdir -p ~/.local/bin
-		mv nvim.appimage ~/.local/bin/nvim
+    if [[ $(uname -s) == "Darwin" ]]; then
+        # MacOS
+        brew install neovim
+    else
+        # Linux
+        wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+        chmod +x nvim.appimage
+        mkdir -p ~/.local/bin
+        mv nvim.appimage ~/.local/bin/nvim
 
-	fi
+    fi
 
-	# configuration
-	mkdir -p ~/.config
-	ln -s $CWD/neovim ~/.config/nvim
+    # configuration
+    mkdir -p ~/.config
+    ln -s $CWD/neovim ~/.config/nvim
 }
 
 if [[ "$#" -lt 1 ]]; then
