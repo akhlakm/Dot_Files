@@ -168,7 +168,6 @@ matplotlib() {
     echo "Please run '$0 fonts' to install the required fonts."
 }
 
-
 neovim() {
     if [[ $(uname -s) == "Darwin" ]]; then
         # MacOS
@@ -179,13 +178,42 @@ neovim() {
         chmod +x nvim.appimage
         mkdir -p ~/.local/bin
         mv nvim.appimage ~/.local/bin/nvim
-
     fi
 
     # configuration
     mkdir -p ~/.config
-    ln -s $CWD/neovim ~/.config/nvim
+    [[ -d ~/.config/nvim ]] || ln -s $CWD/neovim ~/.config/nvim
 }
+
+tmux() {
+    # Install tmux on Mac or Linux.
+    if [[ $(uname -s) == "Darwin" ]]; then
+        # MacOS
+        brew install tmux 
+    else
+        # Linux
+        # Update the URL / version number if necessary.
+        wget https://github.com/nelsonenzo/tmux-appimage/releases/download/3.3a/tmux.appimage 
+        chmod +x tmux.appimage
+        mkdir -p ~/.local/bin
+        mv tmux.appimage ~/.local/bin/tmux
+    fi
+
+    # Configuration
+    mkdir -p ~/.config
+    [[ -d ~/.config/tmux ]] || ln -s $CWD/tmux ~/.config/tmux
+
+    # (TPM) tmux plugin installer
+    if [[ ! -d $CWD/tmux/plugins/tpm ]]; then
+        mkdir -p $CWD/tmux/plugins/
+        cd $CWD/tmux/plugins
+        command git clone https://github.com/tmux-plugins/tpm tpm
+    else
+        cd $CWD/tmux/plugins/tpm && command git pull
+        cd $CWD
+    fi
+}
+
 
 if [[ "$#" -lt 1 ]]; then
 
@@ -200,7 +228,8 @@ if [[ "$#" -lt 1 ]]; then
     echo -e "\t fonts - Install custom user fonts."
     echo -e "\t matplotlib - Setup matplotlib style file."
     echo -e "\t spotify - Setup spotify-client repo and install. (SU)"
-    echo -e "\t neovim - Setup and install neovim."
+    echo -e "\t neovim - Setup and install neovim (AppImage)."
+    echo -e "\t tmux - Setup and install tmux (AppImage)."
     echo
 
 else
