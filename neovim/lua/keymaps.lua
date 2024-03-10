@@ -72,4 +72,8 @@ vim.keymap.set("n", "<C-b>", "<Cmd>Neotree toggle<CR>")
 -- Escape insert mode using jk
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Use jk key combination to escape the insert mode" })
 
+-- Increase or decrease indentation
+vim.keymap.set("v", "{", "<gv")
+vim.keymap.set("v", "}", ">gv")
+
 -- vim: ts=2 sts=2 sw=2 et
