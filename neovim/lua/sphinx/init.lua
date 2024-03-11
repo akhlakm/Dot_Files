@@ -9,8 +9,13 @@ sphinx.setup = function(opts)
 	opts = opts or {}
 
 	-- Store global options
-	-- config.opts["python_ok"] = true
-	config.opts.python_ok = true
+	if vim.fn.executable("pip") == 1 then
+		config.opts.python_ok = true
+	end
+
+	if vim.fn.executable("sphinx") == 1 then
+		config.opts.sphinx_ok = true
+	end
 
 	-- Store user options
 	config.set_user_opts({
