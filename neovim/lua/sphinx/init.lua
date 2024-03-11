@@ -13,7 +13,7 @@ sphinx.setup = function(opts)
 		config.opts.python_ok = true
 	end
 
-	if vim.fn.executable("sphinx") == 1 then
+	if vim.fn.executable("sphinx-build") == 1 then
 		config.opts.sphinx_ok = true
 	end
 
