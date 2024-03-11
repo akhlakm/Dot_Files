@@ -78,9 +78,20 @@ require("lazy").setup({
 	-- require 'plugins.debug',
 	require("plugins.indent_line"),
 
-	--  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-	--    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-	-- { import = 'custom' },
+	-- Load a local plugin.
+	{
+		dir = "nota",
+		name = "nota",
+		dev = true,
+		config = function()
+			require("nota").setup({
+				global_path = "nota/notes/",
+				scratch_path = "nota/scratch/",
+				local_path = "project-notes/",
+				vertical_split = true,
+			})
+		end,
+	},
 }, {
 	ui = {
 		-- If you have a Nerd Font, set icons to an empty table which will use the
