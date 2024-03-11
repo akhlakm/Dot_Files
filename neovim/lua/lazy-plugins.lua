@@ -75,6 +75,8 @@ require("lazy").setup({
 
 	require("plugins.ayu"),
 
+	require("plugins.noice"),
+
 	-- require 'plugins.debug',
 	require("plugins.indent_line"),
 
