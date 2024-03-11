@@ -78,6 +78,17 @@ require("lazy").setup({
 	-- require 'plugins.debug',
 	require("plugins.indent_line"),
 
+	-- Load the local sphinx plugin
+	{
+		dir = "sphinx",
+		dev = true,
+		config = function()
+			require("sphinx").setup({
+				test = "hello",
+			})
+		end,
+	},
+
 	-- Load a local plugin.
 	{
 		dir = "nota",
