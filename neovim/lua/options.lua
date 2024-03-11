@@ -69,4 +69,10 @@ vim.opt.colorcolumn = "90" -- vertical bar at column 80
 vim.opt.completeopt = "menuone"
 vim.opt.iskeyword:append("-")
 
+-- Colorscheme
+local ok, _ = pcall(vim.cmd, "colorscheme ayu-light")
+if not ok then
+	vim.cmd("colorscheme default") -- if the above fails, then use default
+end
+
 -- vim: ts=2 sts=2 sw=2 et
