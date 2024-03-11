@@ -36,6 +36,14 @@ require("lazy").setup({
 	-- "gc" to comment visual regions/lines
 	{ "numToStr/Comment.nvim", opts = {} },
 
+	-- Docstring generator for function.
+	{
+		"danymat/neogen",
+		config = true,
+		-- Uncomment next line if you want to follow only stable versions
+		-- version = "*"
+	},
+
 	-- modular approach: using `require 'path/name'` will
 	-- include a plugin definition from file lua/path/name.lua
 
