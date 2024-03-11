@@ -331,7 +331,6 @@ alias remove="/bin/rm -I"
 # example 'say "ding dong"'
 alias say='spd-say'
 
-
 # display sorted directory file size
 alias dus="du --max-depth=1 | sort -nr"
 
@@ -575,6 +574,19 @@ ssh-upload-key() {
 	read -p "User: " username
 	[[ -f ~/.ssh/id_ed25519 ]] || ssh-key
 	cat ~/.ssh/id_ed25519.pub | ssh ${username}@${server} "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+}
+
+# create ssh tunnel to localhost port on remote.
+ssh-tunnel() {
+	# ssh-tunnel akhlak@remotehost.com 4455 8080
+	remote=$1
+	remoteport=$2
+	localport=$3
+	if curl localhost:$localport > /dev/null; then
+		echo "Port $localport busy"
+	else
+		ssh -n -f -L 127.0.0.1:$localport:127.0.0.1:$remoteport $remote
+	fi
 }
 
 # update and shutdown

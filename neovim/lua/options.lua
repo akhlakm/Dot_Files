@@ -1,4 +1,5 @@
 -- [[ Setting options ]]
+-- Set these options before loading the plugins.
 -- See `:help vim.opt`
 --  For more options, you can see `:help option-list`
 
@@ -57,7 +58,6 @@ vim.opt.scrolloff = 10
 
 -- Tabs and spaces
 vim.opt.tabstop = 4 -- A TAB character looks like 4 spaces
--- vim.opt.expandtab = true -- Pressing the TAB key will insert spaces instead of a TAB character
 vim.opt.softtabstop = 4 -- Number of spaces inserted instead of a TAB character
 vim.opt.shiftwidth = 4 -- Number of spaces inserted when indenting
 vim.opt.smartindent = true
@@ -68,5 +68,8 @@ vim.opt.colorcolumn = "90" -- vertical bar at column 80
 
 vim.opt.completeopt = "menuone"
 vim.opt.iskeyword:append("-")
+
+-- Some of these options may get overwritten, or require plugins to load first.
+-- Add those options of init.lua after loading the plugins.
 
 -- vim: ts=2 sts=2 sw=2 et

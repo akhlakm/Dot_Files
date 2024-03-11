@@ -1,6 +1,10 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
+local is_darwin = function()
+	return wezterm.target_triple:find("darwin") ~= nil
+end
+
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
@@ -8,7 +12,10 @@ local config = wezterm.config_builder()
 config.default_prog = { "bash", "-l" }
 
 -- White colors
--- config.color_scheme = "Material"
+config.color_scheme = "Material"
+
+-- font
+config.font = wezterm.font("CaskaydiaCove Nerd Font")
 
 -- Leader key
 config.leader = { key = "\\", mods = "CTRL", timeout_milliseconds = 1000 }
@@ -17,19 +24,27 @@ config.keys = {
 
 	{ -- Close Tab
 		key = "DownArrow",
-		mods = "CMD",
+		mods = "CMD" and is_darwin() or "CTRL",
 		action = wezterm.action.CloseCurrentTab({ confirm = false }),
 	},
 
 	{ -- New Tab
 		key = "UpArrow",
-		mods = "CMD",
+		mods = "CMD" and is_darwin() or "CTRL",
 		action = wezterm.action.SpawnTab("CurrentPaneDomain"),
 	},
 
 	-- Tab navigation
-	{ key = "LeftArrow", mods = "CMD", action = wezterm.action.ActivateTabRelative(-1) },
-	{ key = "RightArrow", mods = "CMD", action = wezterm.action.ActivateTabRelative(1) },
+	{
+		key = "LeftArrow",
+		mods = "CMD" and is_darwin() or "CTRL",
+		action = wezterm.action.ActivateTabRelative(-1),
+	},
+	{
+		key = "RightArrow",
+		mods = "CMD" and is_darwin() or "CTRL",
+		action = wezterm.action.ActivateTabRelative(1),
+	},
 
 	-- Split panes
 	{

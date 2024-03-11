@@ -2,6 +2,7 @@
 --  See `:help vim.keymap.set()`
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
+local opts = { noremap = true, silent = true }
 vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
@@ -74,4 +75,9 @@ vim.keymap.set("i", "jk", "<Esc>", { desc = "Use jk key combination to escape th
 vim.keymap.set("v", "{", "<gv")
 vim.keymap.set("v", "}", ">gv")
 
--- vim: ts=2 sts=2 sw=2 et
+-- Neogen docstring generation. Run inside a function or class.
+local opts = { noremap = true, silent = true }
+
+vim.api.nvim_set_keymap("n", "<Leader>nf", ":lua require('neogen').generate()<CR>", opts)
+
+vim.api.nvim_set_keymap("n", "<Leader>nc", ":lua require('neogen').generate({ type = 'class' })<CR>", opts)

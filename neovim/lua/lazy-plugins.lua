@@ -1,3 +1,12 @@
+-- [[ Install `lazy.nvim` plugin manager ]]
+--    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+	vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+end ---@diagnostic disable-next-line: undefined-field
+vim.opt.rtp:prepend(lazypath)
+
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -27,45 +36,80 @@ require("lazy").setup({
 	-- "gc" to comment visual regions/lines
 	{ "numToStr/Comment.nvim", opts = {} },
 
+	-- Docstring generator for function.
+	{
+		"danymat/neogen",
+		config = true,
+		-- Uncomment next line if you want to follow only stable versions
+		version = "*",
+	},
+
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+	},
+
 	-- modular approach: using `require 'path/name'` will
 	-- include a plugin definition from file lua/path/name.lua
 
-	require("kickstart.plugins.neotree"),
+	require("plugins.neotree"),
 
-	require("kickstart.plugins.neogit"),
+	require("plugins.neogit"),
 
-	require("kickstart.plugins.gitsigns"),
+	require("plugins.gitsigns"),
 
-	require("kickstart.plugins.which-key"),
+	require("plugins.which-key"),
 
-	require("kickstart.plugins.telescope"),
+	require("plugins.telescope"),
 
-	require("kickstart.plugins.lspconfig"),
+	require("plugins.lspconfig"),
 
-	require("kickstart.plugins.conform"),
+	require("plugins.conform"),
 
-	require("kickstart.plugins.cmp"),
+	require("plugins.cmp"),
 
-	require("kickstart.plugins.tokyonight"),
+	require("plugins.tokyonight"),
 
-	require("kickstart.plugins.todo-comments"),
+	require("plugins.todo-comments"),
 
-	require("kickstart.plugins.mini"),
+	require("plugins.mini"),
 
-	require("kickstart.plugins.treesitter"),
+	require("plugins.treesitter"),
 
-	require("kickstart.plugins.markdown"),
+	require("plugins.markdown"),
 
-	-- require 'kickstart.plugins.debug',
-	require("kickstart.plugins.indent_line"),
+	require("plugins.ayu"),
 
-	-- NOTE: The import below can automatically add your own plugins, configuration,
-	-- etc from `lua/custom/plugins/*.lua`
-	--    This is the easiest way to modularize your config.
-	--
-	--  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-	--    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-	-- { import = 'custom.plugins' },
+	require("plugins.noice"),
+
+	-- require 'plugins.debug',
+	require("plugins.indent_line"),
+
+	-- Load the local sphinx plugin
+	{
+		dir = "sphinx",
+		dev = true,
+		config = function()
+			require("sphinx").setup({
+				test = "hello",
+			})
+		end,
+	},
+
+	-- Load a local plugin.
+	{
+		dir = "nota",
+		name = "nota",
+		dev = true,
+		config = function()
+			require("nota").setup({
+				global_path = "nota/notes/",
+				scratch_path = "nota/scratch/",
+				local_path = "project-notes/",
+				vertical_split = true,
+			})
+		end,
+	},
 }, {
 	ui = {
 		-- If you have a Nerd Font, set icons to an empty table which will use the
