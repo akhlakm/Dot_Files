@@ -41,7 +41,12 @@ require("lazy").setup({
 		"danymat/neogen",
 		config = true,
 		-- Uncomment next line if you want to follow only stable versions
-		-- version = "*"
+		version = "*",
+	},
+
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 
 	-- modular approach: using `require 'path/name'` will
