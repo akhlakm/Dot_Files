@@ -8,7 +8,10 @@ local config = wezterm.config_builder()
 config.default_prog = { "bash", "-l" }
 
 -- White colors
--- config.color_scheme = "Material"
+config.color_scheme = "Material"
+
+-- font
+config.font = wezterm.font("Caskaydia Cove Nerd Font")
 
 -- Leader key
 config.leader = { key = "\\", mods = "CTRL", timeout_milliseconds = 1000 }
