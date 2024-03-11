@@ -16,6 +16,10 @@ require("keymaps")
 require("lazy-plugins")
 
 -- Colorscheme
-pcall(vim.cmd, "colorscheme ayu")
+vim.cmd("colorscheme ayu")
 
+-- open neotree
+vim.cmd("Neotree toggle")
+
+-- replace tabs with spaces
 vim.opt.expandtab = true -- Set this to override paste, which resets expandtab
