@@ -9,6 +9,10 @@ sphinx.setup = function(opts)
 	opts = opts or {}
 
 	-- Store global options
+	-- config.opts["python_ok"] = true
+	config.opts.python_ok = true
+
+	-- Store user options
 	config.set_user_opts({
 		test = opts.test or nil,
 	})
