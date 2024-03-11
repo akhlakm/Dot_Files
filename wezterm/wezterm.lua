@@ -24,25 +24,25 @@ config.keys = {
 
 	{ -- Close Tab
 		key = "DownArrow",
-		mods = "CMD" and is_darwin() or "CTRL",
+		mods = is_darwin() and "CMD" or "CTRL",
 		action = wezterm.action.CloseCurrentTab({ confirm = false }),
 	},
 
 	{ -- New Tab
 		key = "UpArrow",
-		mods = "CMD" and is_darwin() or "CTRL",
+		mods = is_darwin() and "CMD" or "CTRL",
 		action = wezterm.action.SpawnTab("CurrentPaneDomain"),
 	},
 
 	-- Tab navigation
 	{
 		key = "LeftArrow",
-		mods = "CMD" and is_darwin() or "CTRL",
+		mods = is_darwin() and "CMD" or "CTRL",
 		action = wezterm.action.ActivateTabRelative(-1),
 	},
 	{
 		key = "RightArrow",
-		mods = "CMD" and is_darwin() or "CTRL",
+		mods = is_darwin() and "CMD" or "CTRL",
 		action = wezterm.action.ActivateTabRelative(1),
 	},
 
