@@ -44,6 +44,9 @@ vim.keymap.set("n", "<A-left>", "<cmd>tabprevious<CR>", { desc = "Go to the left
 vim.keymap.set("n", "<A-right>", "<cmd>tabNext<CR>", { desc = "Go to the right tab" })
 vim.keymap.set("n", "<A-down>", "<cmd>tabclose<CR>", { desc = "Close current tab" })
 
+-- Toogle wrap
+vim.keymap.set("n", "<Leader>l", "<cmd>set wrap!<CR>", { desc = "Toogle line wrap" })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
