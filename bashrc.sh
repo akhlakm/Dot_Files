@@ -433,7 +433,11 @@ alias term="gnome-terminal --working-directory"
 
 # open file with default application
 function open () {
-	if havecmd xdg-open; then
+	if havecmd open; then
+		# MacOS
+		command open "$@" >/dev/null 2>&1
+	elif havecmd xdg-open; then
+		# Linux
 		xdg-open "$@">/dev/null 2>&1
 	elif havecmd start; then
 		# cygwin or git-bash
