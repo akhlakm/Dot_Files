@@ -144,11 +144,14 @@ return {
 								autoImportCompletions = true,
 								autoSearchPaths = true,
 								diagnosticMode = "workspace", -- openFilesOnly, workspace
-								typeCheckingMode = "basic", -- off, basic, strict
+								typeCheckingMode = "off", -- off, basic, strict
+								-- Note: these are not currently supported by lspconfig.
+								-- See more at: https://github.com/microsoft/pyright/blob/main/docs/configuration.md#diagnostic-settings-defaults
+								reportArgumentType = "warning",
+								reportOperatorIssue = "warning",
+								reportReturnType = "warning",
+
 								useLibraryCodeForTypes = true,
-							},
-							diagnostics = {
-								disable = { "reportArgumentType", "reportOptionalMemberAccess" },
 							},
 						},
 					},
