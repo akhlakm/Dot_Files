@@ -147,6 +147,9 @@ return {
 								typeCheckingMode = "basic", -- off, basic, strict
 								useLibraryCodeForTypes = true,
 							},
+							diagnostics = {
+								disable = { "reportArgumentType", "reportOptionalMemberAccess" },
+							},
 						},
 					},
 				},
