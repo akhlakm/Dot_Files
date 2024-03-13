@@ -137,7 +137,19 @@ return {
 				clangd = {},
 				-- go binary needs to be available on path
 				-- gopls = {},
-				pyright = {},
+				pyright = {
+					settings = {
+						python = {
+							analysis = {
+								autoImportCompletions = true,
+								autoSearchPaths = true,
+								diagnosticMode = "workspace", -- openFilesOnly, workspace
+								typeCheckingMode = "basic", -- off, basic, strict
+								useLibraryCodeForTypes = true,
+							},
+						},
+					},
+				},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
@@ -189,7 +201,7 @@ return {
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format lua code
-			-- Make sure python_venv is installed for these!
+				-- Make sure python_venv is installed for these!
 				-- "isort", -- python import orders
 				-- "flake8", -- python code
 			})
