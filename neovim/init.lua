@@ -15,10 +15,12 @@ require("keymaps")
 
 require("lazy-plugins")
 
+require("terminal")
+
 -- Colorscheme
 vim.cmd("colorscheme ayu")
 
--- open neotree
+-- Open neotree on startup
 vim.cmd("Neotree toggle")
 
 -- replace tabs with spaces
