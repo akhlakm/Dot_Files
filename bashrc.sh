@@ -146,7 +146,7 @@ git_prompt() {
 # ---------------------------------
 if havecmd make; then
 	if [[ ! -f ~/Makefile ]]; then
-		if [[ -f ~/Dot_Files/Makefile ]]; then 
+		if [[ -f ~/Dot_Files/Makefile ]]; then
 			ln -s Dot_Files/Makefile Makefile
 		fi
 	fi
@@ -563,7 +563,7 @@ alias ssha='eval $(ssh-agent) && ssh-add'
 ssh-key() {
 	if [[ ! -f ~/.ssh/id_ed25519 ]]; then
 		ssh-keygen -t ed25519 -C ${HOSTNAME}
-		chmod 700 ~/.ssh 
+		chmod 700 ~/.ssh
 		eval $(ssh-agent) && ssh-add
 		__test -f ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
 	fi
@@ -610,6 +610,13 @@ shutup() {
     sudo apt update && sudo apt upgrade -y && sudo shutdown
 }
 
+sphinxdocs() {
+	dotdir=$(dirname $(realpath ~/.bashrc))
+	mkdir -p docs
+	rsync -avrRh $dotdir/sphinx/./ docs/./ || exit 1
+	echo "SphinxDocs created"
+}
+
 CONDAHOME=~
 
 # END OF BASHRC DEFINITIONS
@@ -629,7 +636,7 @@ else
 
 # xterm_setcolor \$green \$RED
 
-# CONDAHOME=~
+# export CONDAHOME=${CONDAHOME}
 
 EOF
 	vi ~/.bash_aliases
