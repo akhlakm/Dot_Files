@@ -593,7 +593,10 @@ ssht() {
 	# tunnel settings
 	read -p "Remote Server Port: " remoteport
 	read -p "Local Port: " localport
-	
+
+	# use remoteport if none specified
+	localport=${localport:-$remoteport}
+
 	if curl localhost:$localport &> /dev/null; then
 		echo "Port $localport busy"
 	else
