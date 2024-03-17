@@ -82,6 +82,8 @@ require("lazy").setup({
 
 	require("plugins.noice"),
 
+	require("plugins.quarto"),
+
 	-- require 'plugins.debug',
 	require("plugins.indent_line"),
 

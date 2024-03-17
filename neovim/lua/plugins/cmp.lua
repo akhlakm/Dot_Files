@@ -23,6 +23,7 @@ return {
 			--  into multiple repos for maintenance purposes.
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
+			"jmbuhr/otter.nvim",
 
 			-- If you want to add a bunch of pre-configured snippets,
 			--    you can use this plugin to help you. It even has snippets
@@ -88,9 +89,9 @@ return {
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "path" },
+					{ name = "otter" },
 				},
 			})
 		end,
 	},
 }
--- vim: ts=2 sts=2 sw=2 et
