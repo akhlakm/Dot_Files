@@ -36,4 +36,14 @@ docs-logs() {
     cat ~/quarto-preview.log
 }
 
+docs-setup() {
+    # Render the setup page as PDF.
+    #
+    outfile=Project-Setup.pdf
+
+    quarto render project/setup.qmd --to pdf --toc || exit 34
+    cp _site/project/setup.pdf $outfile
+    echo "Saved OK: $outfile"
+}
+
 "$@"

@@ -15,6 +15,6 @@ Build this docs using `mk docs` to see a live preview of the changes as you writ
 
 | Group             | Topic               |
 |-------------------|---------------------|
-| Introduction | [Project Dev Environment Setup](/project/dev-environment.html) |
+| Introduction | [Project Setup](/project/setup.html) |
 |       | [Project Ideas](/project/ideas.html) |
 |       | [Links and Resources](/project/resources.html) |
