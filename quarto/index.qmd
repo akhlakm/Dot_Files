@@ -1,0 +1,20 @@
+---
+title: "New Project"
+tbl-colwidths: [10,30]
+---
+Welcome!
+This is your own notebook, write your project notes here.
+Writing helps to keep track of things and improves your analytical thinking.
+
+See the [Quarto Authoring Guide](https://quarto.org/docs/guide/) for instructions about formatting.
+
+Build this docs using `mk docs` to see a live preview of the changes as you write and update these files.
+
+## Contents
+<!-- Add new pages below if necessary. -->
+
+| Group             | Topic               |
+|-------------------|---------------------|
+| Introduction | [Project Dev Environment Setup](/project/dev-environment.html) |
+|       | [Project Ideas](/project/ideas.html) |
+|       | [Links and Resources](/project/resources.html) |

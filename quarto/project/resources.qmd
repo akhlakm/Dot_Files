@@ -1,0 +1,7 @@
+---
+title: Awesome Resources
+---
+
+Checkout these resources:
+
+1. [Quarto](https://quarto.com/)

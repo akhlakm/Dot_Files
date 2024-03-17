@@ -1,0 +1,6 @@
+---
+title: 404 Not Found
+---
+The page you requested is not found.
+
+[Index Page](/)

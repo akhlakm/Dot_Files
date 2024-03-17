@@ -1,0 +1,60 @@
+project:
+  type: website
+  preview:
+    port: 8088
+    browser: false
+
+website:
+  page-navigation: true
+  title: "Project Title"
+  description: "Project documentation, Ramprasad Group, GATech."
+  # site-url: "https://sta210-s22.github.io/website/"
+  #
+  # repo-url: https://github.com/sta210-s22/website
+  # repo-actions: [edit, issue]
+  #
+
+  page-footer:
+    right: "Built with [STA 2010](https://github.com/sta210-s22/website) and [Quarto](https://quarto.org/)."
+    left: "&copy; Copyright 2024 Akhlak Mahmood"
+    background: "#D9E3E4"
+
+  sidebar:
+    background: "#D9E3E4"
+    title: Project Title<br>
+    pinned: true
+    align: center
+    tools:
+      - icon: github
+        href: https://github.com/akhlakm
+        text: "GitHub"
+    style: "docked"
+    search: true
+    collapse-level: 1
+    contents:
+
+      - href: index.qmd
+        text: Index
+
+      - section: Project
+        contents:
+          - href: project/ideas.qmd
+            text: Ideas
+          - href: project/resources.qmd
+            text: Resources
+          - href: project/dev-environment.qmd
+            text: Setup
+
+format:
+  html:
+    theme:
+      light: [cosmo, theme.scss]
+      dark: [cosmo, theme-dark.scss]
+    mainfont: "Atkinson Hyperlegible"
+    code-copy: true
+    code-overflow: wrap
+    toc: true
+
+freeze: auto
+
+editor: visual

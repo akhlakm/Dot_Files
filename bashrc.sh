@@ -610,11 +610,18 @@ shutup() {
     sudo apt update && sudo apt upgrade -y && sudo shutdown
 }
 
-sphinxdocs() {
+sphinx-docs() {
 	dotdir=$(dirname $(realpath ~/.bashrc))
 	mkdir -p docs
 	rsync -avrRh $dotdir/sphinx/./ docs/./ || exit 1
 	echo "SphinxDocs created"
+}
+
+quarto-docs() {
+	dotdir=$(dirname $(realpath ~/.bashrc))
+	mkdir -p docs
+	rsync -avrRh $dotdir/quarto/./ docs/./ || exit 1
+	echo "QuartoDocs created"
 }
 
 CONDAHOME=~
