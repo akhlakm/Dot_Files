@@ -4,17 +4,21 @@ tbl-colwidths: [10,30]
 ---
 Welcome!
 This is your own notebook, write your project notes here.
-Writing helps to keep track of things and improves your analytical thinking.
+Writing helps to keep track of things and improves your analytical abilities.
 
-See the [Quarto Authoring Guide](https://quarto.org/docs/guide/) for instructions about formatting.
+This documentation will generate website and PDF files using a tool called [Quarto](https://quarto.org).
+You can refer to the [Quarto Authoring Guide](https://quarto.org/docs/guide/) for instructions about how to write a page like this one.
 
 Build this docs using `mk docs` to see a live preview of the changes as you write and update these files.
 
 ## Contents
-<!-- Add new pages below if necessary. -->
 
 | Group             | Topic               |
 |-------------------|---------------------|
 | Introduction | [Project Setup](/project/setup.html) |
 |       | [Project Ideas](/project/ideas.html) |
 |       | [Links and Resources](/project/resources.html) |
+
+
+<!-- As you work on new tasks, create new files, write notes, and add to the table. -->
+<!-- Make sure to save the file with a .qmd extension, but the link as .html -->

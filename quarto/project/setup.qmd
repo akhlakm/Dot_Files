@@ -1,19 +1,20 @@
 ---
-title: "Dev Environment"
+title: "Environment Setup"
 author: "Akhlak Mahmood"
+date: last-modified
 ---
 
-Step-by-step guide to setting up your development environment for this project.
+A step-by-step guide to setting up your development environment for this project.
 
 ## Preparation
 
-Make sure you have the following ready
+Make sure you have the following ready.
 
-1. Access to one of the group servers (tyrion, tyrion2 etc.)
-2. Access to the [GitHub organization](https://github.com/Ramprasad-Group) as a member
-3. Installed the GATech VPN software on your laptop/desktop
+1. Access to one of the group servers (tyrion, tyrion2, etc.).
+2. Access to the group's [GitHub](https://github.com/Ramprasad-Group) as a member.
+3. Installed the GATech VPN software on your laptop/desktop.
 
-## Connection
+## Connecting to the Server
 If you are using one of our group servers
 
 1. Login to GATech VPN
@@ -30,14 +31,21 @@ ssh-keygen
 ## Install Miniconda
 We will use conda for environment and package management.
 
-1. Download and install the correct version of miniconda for your OS from [the official website](https://docs.anaconda.com/free/miniconda/#latest-miniconda-installer-links).
+1.  Download and install the correct version of miniconda for your OS from [the official website](https://docs.anaconda.com/free/miniconda/#latest-miniconda-installer-links).
 
-2. **Note:** If you are using one of the group servers, you must enter `/data/<your_username>/miniconda3` as your installation path. Do not simply accept the default path.
+2.  Follow the installation instructions to setup miniconda.
 
 ::: callout-note
+If you are using one of the group servers,
+you must enter `/data/<your_username>/miniconda3` as your installation path.
+Do not simply accept the default path.
 You should keep your `/home/<your_username>` directory clean.
-Always install any large software (such as miniconda) on your `/data` directory. Your home directory usage must not exceed 15 GB at anytime.
+Always install any large software (such as miniconda) on your `/data` directory.
+Your home directory usage (on the server) must not exceed 15 GB at anytime.
 :::
+
+3.  Make sure conda is installed by running `conda --version`.
+    You may have to logout and login again if it does not work.
 
 
 ## Setup the Project

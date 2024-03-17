@@ -38,12 +38,15 @@ docs-logs() {
 
 docs-setup() {
     # Render the setup page as PDF.
+    # You may need to run `quarto install tinytex`.
     #
     outfile=Project-Setup.pdf
 
     quarto render project/setup.qmd --to pdf --toc || exit 34
     cp _site/project/setup.pdf $outfile
     echo "Saved OK: $outfile"
+
+    open $outfile
 }
 
 "$@"
