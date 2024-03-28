@@ -413,6 +413,15 @@ if __test -d ~/.config/matplotlib; then
 	mplrc="~/.config/matplotlib/matplotlibrc"
 fi
 
+
+# Add local bin to path
+# ---------------------------------
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+	mkdir -p $HOME/.local/bin
+	export PATH="${PATH}:$HOME/.local/bin"
+fi
+
+
 # Useful tools
 # ---------------------------------
 
