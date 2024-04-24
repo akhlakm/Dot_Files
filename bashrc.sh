@@ -454,76 +454,10 @@ function open () {
 	fi
 }
 
-# open a jupyter lab workspace
-jlab() {
-	# check if server is running or start it
-	nc -4 -d -z -w 1 127.0.0.1 8888 &> /dev/null
-	if [[ $? -ne 0 ]]; then
-		nohup jupyter lab &> /tmp/jlab.log &
-		sleep 1
-	fi
-}
-
-# Quick google search
-# example 'google "Weather Today"'
-google() {
-	open "https://www.google.com/search?q=$@"
-}
-
 # Ignore a dropbox folder
 dbignore() {
 	attr -s com.dropbox.ignored -V 1 "$1"
 }
-
-# usage: localhost <path> <port>
-localhost() {
-	local port=${2:-8000}
-	local path="${1:-/}"
-	open "http://localhost:${port}${path}"
-}
-
-backupd() {
-	# Backup a directory
-	[[ -d $1 ]] || return 1
-	dest=$(date +%y%m%d)$1
-	mkdir -p $dest || return 2
-	echo "** [$USER@$HOSTNAME:$PWD $(date)]\$ backupd"	| tee ${dest}/README.txt
-	echo "** RESTORE: tar -C $1 -xzf backup.tar.gz" 	| tee -a ${dest}/README.txt
-	tar -cvzpf ${dest}/backup.tar.gz -C $1 . 			| tee -a ${dest}/README.txt
-	echo; echo "** OK: ${dest}/backup.tar.gz"
-}
-
-backupd-sudo() {
-	# Backup a directory with sudo
-	[[ -d $1 ]] || return 1
-	dest=$(date +%y%m%d)$1
-	sudo mkdir -p $dest || return 2
-	echo "** [$USER@$HOSTNAME:$PWD $(date)]\$ backupd-sudo"	| sudo tee ${dest}/README.txt
-	echo "** RESTORE: tar -C $1 -xzf backup.tar.gz" 		| sudo tee -a ${dest}/README.txt
-	sudo tar -cvzpf ${dest}/backup.tar.gz -C $1 . 			| sudo tee -a ${dest}/README.txt
-	echo; echo "** OK: ${dest}/backup.tar.gz"
-}
-
-# Swap two files.
-# If the second file doesn't exist, empty one is created for it.
-# Be careful, both files will exist, only contents are exchaned.
-swap() {
-	local file1 file2
-	file1="$1"; file2="$2"
-	[[ -f "${file2}" ]] || touch "${file2}"
-	cp -fv "${file1}" "swap.${file1}" && \
-	mv -fv "${file2}" "${file1}" && \
-	mv -v "swap.${file1}" "${file2}"
-	echo done
-}
-
-# from https://github.com/helmuthdu/dotfiles/blob/master/.bashrc
-# REMIND ME, ITS IMPORTANT!
-# usage: remindme <time> <text>
-# e.g.: remindme 10m "omg, the pizza"
-remindme() { sleep $1 && zenity --info --text "$2" & }
-
-tellme() { sleep $1 && spd-say "$2" & }
 
 # from https://github.com/trentm/dotfiles/blob/master/home/.bashrc
 # List path entries of PATH or environment variable <var>.
