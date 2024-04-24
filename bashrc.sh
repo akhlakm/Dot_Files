@@ -633,7 +633,7 @@ quarto-docs() {
 	echo "QuartoDocs created"
 }
 
-CONDAHOME=~
+CONDAHOME=~/miniconda3
 
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------
@@ -670,14 +670,14 @@ if ! shopt -oq posix; then
 fi
 
 # Set Conda init. Update CONDAHOME from bash_aliases if necessary.
-__conda_setup="$('$CONDAHOME/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('$CONDAHOME/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "$CONDAHOME/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "$CONDAHOME/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "$CONDAHOME/etc/profile.d/conda.sh" ]; then
+        . "$CONDAHOME/etc/profile.d/conda.sh"
     else
-        export PATH="$CONDAHOME/miniconda3/bin:$PATH"
+        export PATH="$CONDAHOME/bin:$PATH"
     fi
 fi
 unset __conda_setup
