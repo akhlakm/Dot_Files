@@ -19,7 +19,7 @@ return {
 				javascript = { { "prettierd", "prettier" } },
 
 				-- all files
-				["*"] = { "trim_whitespace", "trim_newlines" },
+				["*"] = { "trim_whitespace" },
 			},
 		},
 	},

@@ -3,7 +3,6 @@
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 local opts = { noremap = true, silent = true }
-vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Diagnostic keymaps
@@ -50,24 +49,6 @@ vim.keymap.set("n", "<Leader>l", "<cmd>set wrap!<CR>", { desc = "Toogle line wra
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
-vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
-})
-
--- Remember last positions
-vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-	desc = "return cursor to where it was last time closing the file",
-	pattern = "*",
-	command = 'silent! normal! g`"zv',
-})
-
 -- Toggle NeoTree
 vim.keymap.set("n", "<C-b>", "<Cmd>Neotree toggle<CR>")
 
@@ -79,7 +60,6 @@ vim.keymap.set("v", "{", "<gv")
 vim.keymap.set("v", "}", ">gv")
 
 -- Neogen docstring generation. Run inside a function or class.
-local opts = { noremap = true, silent = true }
 
 vim.api.nvim_set_keymap("n", "<Leader>nf", ":lua require('neogen').generate()<CR>", opts)
 

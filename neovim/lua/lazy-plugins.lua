@@ -87,6 +87,8 @@ require("lazy").setup({
 	-- require 'plugins.debug',
 	require("plugins.indent_line"),
 
+	require("plugins.iron"),
+
 	-- Load the local sphinx plugin
 	{
 		dir = "sphinx",

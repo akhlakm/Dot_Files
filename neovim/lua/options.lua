@@ -12,6 +12,9 @@ vim.opt.relativenumber = true
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = "a"
 
+-- highlight the matches
+vim.opt.hlsearch = true
+
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
 
@@ -72,4 +75,22 @@ vim.opt.iskeyword:append("-")
 -- Some of these options may get overwritten, or require plugins to load first.
 -- Add those options of init.lua after loading the plugins.
 
--- vim: ts=2 sts=2 sw=2 et
+-- Highlight when yanking (copying) text
+--  Try it with `yap` in normal mode
+--  See `:help vim.highlight.on_yank()`
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
+
+-- Remember last positions
+vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+	desc = "return cursor to where it was last time closing the file",
+	pattern = "*",
+	command = 'silent! normal! g`"zv',
+})
+
+-- vim: ts=4 sts=4 sw=4 et
