@@ -116,5 +116,8 @@ config.keys = {
 	},
 }
 
+-- How many lines of scrollback you want to retain per tab
+config.scrollback_lines = 50000
+
 -- and finally, return the configuration to wezterm
 return config
