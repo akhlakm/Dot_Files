@@ -14,6 +14,21 @@ return {
 					position = "left",
 					width = 30,
 				},
+				sources = {
+					"filesystem",
+				},
+				filesystem = {
+					filtered_items = {
+						visible = true,
+						hide_gitignored = false,
+						hide_hidden = false,
+						hide_dotfiles = false,
+					},
+					follow_current_file = {
+						enabled = true,
+					},
+					hijack_netrw_behavior = "open_default",
+				},
 			})
 		end,
 	},
