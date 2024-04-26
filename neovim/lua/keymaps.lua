@@ -25,6 +25,12 @@ vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 
+-- Faster vertical movements
+vim.keymap.set("n", "J", "5j", { desc = "Move down 5 lines." })
+vim.keymap.set("n", "K", "5k", { desc = "Move up 5 lines." })
+vim.keymap.set("v", "J", "5j", { desc = "Move down 5 lines." })
+vim.keymap.set("v", "K", "5k", { desc = "Move up 5 lines." })
+
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
@@ -45,6 +51,7 @@ vim.keymap.set("n", "<A-down>", "<cmd>tabclose<CR>", { desc = "Close current tab
 
 -- Toogle wrap
 vim.keymap.set("n", "<Leader>l", "<cmd>set wrap!<CR>", { desc = "Toogle line wrap" })
+vim.keymap.set("n", "<Leader>ng", "<cmd>Neogit<CR>", { desc = "Open Neogit" })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
