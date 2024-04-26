@@ -1,13 +1,10 @@
--- [[ Setting options ]]
--- Set these options before loading the plugins.
 -- See `:help vim.opt`
 --  For more options, you can see `:help option-list`
 
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, for help with jumping.
---  Experiment for yourself to see if you like it!
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = "a"
@@ -67,7 +64,7 @@ vim.opt.smartindent = true
 
 -- Wrapping
 vim.opt.wrap = false
-vim.opt.colorcolumn = "90" -- vertical bar at column 80
+vim.opt.colorcolumn = "90" -- vertical bar at column 90
 
 vim.opt.completeopt = "menuone"
 vim.opt.iskeyword:append("-")
@@ -92,5 +89,3 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 	pattern = "*",
 	command = 'silent! normal! g`"zv',
 })
-
--- vim: ts=4 sts=4 sw=4 et
