@@ -44,11 +44,6 @@ require("lazy").setup({
 		version = "*",
 	},
 
-	{
-		"nvim-lualine/lualine.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-	},
-
 	-- modular approach: using `require 'path/name'` will
 	-- include a plugin definition from file lua/path/name.lua
 
@@ -82,7 +77,9 @@ require("lazy").setup({
 
 	require("plugins.noice"),
 
-	require("plugins.quarto"),
+	require("plugins.lualine"),
+
+	-- require("plugins.quarto"),
 
 	-- require 'plugins.debug',
 	require("plugins.indent_line"),

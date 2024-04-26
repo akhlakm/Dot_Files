@@ -44,10 +44,10 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 --  Use CTRL+<hjkl> to switch between tabs
 --
 --  See `:help tabpage` for a list of all tab commands
-vim.keymap.set("n", "<A-up>", "<cmd>tabnew<CR>", { desc = "Create a new tab" })
-vim.keymap.set("n", "<A-left>", "<cmd>tabprevious<CR>", { desc = "Go to the left tab" })
-vim.keymap.set("n", "<A-right>", "<cmd>tabNext<CR>", { desc = "Go to the right tab" })
-vim.keymap.set("n", "<A-down>", "<cmd>tabclose<CR>", { desc = "Close current tab" })
+vim.keymap.set("n", "<A-j>", "<cmd>tabnew %<CR>", { desc = "Create a new tab" })
+vim.keymap.set("n", "<A-l>", "<cmd>tabNext<CR>", { desc = "Go to the right tab" })
+vim.keymap.set("n", "<A-h>", "<cmd>tabprevious<CR>", { desc = "Go to the left tab" })
+vim.keymap.set("n", "<A-k>", "<cmd>tabclose<CR>", { desc = "Close current tab" })
 
 -- Toogle wrap
 vim.keymap.set("n", "<Leader>l", "<cmd>set wrap!<CR>", { desc = "Toogle line wrap" })
