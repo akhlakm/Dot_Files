@@ -7,6 +7,7 @@ return {
 		"Vigemus/iron.nvim",
 		config = function()
 			local iron = require("iron.core")
+			local view = require("iron.view")
 
 			iron.setup({
 				config = {
@@ -22,7 +23,7 @@ return {
 					},
 					-- How the repl window will be displayed
 					-- See below for more information
-					repl_open_cmd = require("iron.view").bottom(40),
+					repl_open_cmd = view.split.vertical.botright(0.40),
 				},
 				-- Iron doesn't set keymaps by default anymore.
 				-- You can set them here or manually add keymaps to the functions in iron.core
