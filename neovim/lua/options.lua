@@ -10,7 +10,7 @@ vim.opt.number = true
 vim.opt.mouse = "a"
 
 -- highlight the matches
-vim.opt.hlsearch = true
+vim.opt.hlsearch = false
 
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
@@ -89,3 +89,6 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 	pattern = "*",
 	command = 'silent! normal! g`"zv',
 })
+
+-- Blinking cursor
+vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor"
