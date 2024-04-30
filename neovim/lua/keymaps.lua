@@ -63,8 +63,12 @@ vim.keymap.set("n", "<C-b>", "<Cmd>Neotree toggle<CR>")
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Use jk key combination to escape the insert mode" })
 
 -- Increase or decrease indentation
-vim.keymap.set("v", "{", "<gv")
-vim.keymap.set("v", "}", ">gv")
+vim.keymap.set("v", "<", "<gv", { desc = "Deindend selection" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indend selection" })
+
+-- Delete instead of cutting, send to the blackhole register _
+vim.keymap.set("v", "d", '"_d', { desc = "Delete" })
+vim.keymap.set("n", "d", '"_d', { desc = "Delete" })
 
 -- Neogen docstring generation. Run inside a function or class.
 
