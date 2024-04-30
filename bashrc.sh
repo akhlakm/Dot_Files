@@ -502,25 +502,29 @@ alias pass="tail -n 1 ~/.passwords"
 # ssh agent for pass phrases
 alias ssha='eval $(ssh-agent) && ssh-add'
 
-# make key pair
-ssh-key() {
-	if [[ ! -f ~/.ssh/id_ed25519 ]]; then
-		ssh-keygen -t ed25519 -C ${HOSTNAME}
-		chmod 700 ~/.ssh
-		eval $(ssh-agent) && ssh-add
-		__test -f ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
-	fi
-	cat ~/.ssh/id_ed25519.pub
-	echo "You can add this key to your github at: https://github.com/settings/keys"
-	echo "Make sure to use the SSH URL for cloning a repository, or update remote URL."
-}
+ssh-newkey() {
+	service=$1
 
-# upload the ed25519 ssh public key to a server
-ssh-upload-key() {
-	read -p "Remote Server IP: " server
-	read -p "User: " username
-	[[ -f ~/.ssh/id_ed25519 ]] || ssh-key
-	cat ~/.ssh/id_ed25519.pub | ssh ${username}@${server} "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+	[[ -n $service ]] || {
+		echo "Usage: $0 <service name>"
+		return 1
+	}
+
+	keypath=~/.ssh/${service}_keypair
+
+	ssh-keygen -t ed25519 -C $service -f $keypath
+
+	echo -e "\nHost $service" >> ~/.ssh/config
+	echo -e "  HostName $service" >> ~/.ssh/config
+	echo -e "  IndentityFile $keypath" >> ~/.ssh/config
+	echo -e "" ~/.ssh/config
+
+	echo "Key pair generated for $service: $keypath"
+	echo "Config file updated for $service: ~/.ssh/config"
+	echo
+
+	echo "You can upload/share the following public key:"
+	cat $keypath.pub
 }
 
 # login and create ssh tunnel to localhost port on remote.
