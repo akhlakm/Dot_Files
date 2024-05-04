@@ -86,6 +86,8 @@ require("lazy").setup({
 
 	require("plugins.iron"),
 
+	-- require("plugins.venv_selector"),
+
 	-- Load the local sphinx plugin
 	{
 		dir = "sphinx",
