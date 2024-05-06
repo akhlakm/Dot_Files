@@ -48,27 +48,26 @@ bashrc(){
     fi
     echo "Symlinked $CWD/bashrc.sh, please restart session to take effect."
 
-    if [[ -f ~/.bash_aliases ]]; then
-        read -p "Existing bash_aliases found. Do you want to move it to $dbDots and symlink? (y/[n]) " answer
-        if [[ $answer == y || $answer == yes ]]; then
-            read -p "What should be the file name of bash_aliases in $dbDots? " aliasname
-            mv ~/.bash_aliases $dbDots/$aliasname
-            ln -s $dbDots/aliasname ~/.bash_aliases
-            echo "Symlinked bash_aliases"
-        fi
-    else
-        echo "No bash_aliases file found. Do you want to create one in $dbDots and symlink?"
-        read -p "Or, do you have a bash_aliases file in $dbDots that you want to symlink? (y/[n]) " answer
-        if [[ $answer == y || $answer == yes ]]; then
-            read -p "What is or should be the file name of bash_aliases in $dbDots? " aliasname
-            ln -s $dbDots/$aliasname ~/.bash_aliases
-            echo "Symlinked bash_aliases"
-        fi
-    fi
+    # if [[ -f ~/.bash_aliases ]]; then
+    #     read -p "Existing bash_aliases found. Do you want to move it to $dbDots and symlink? (y/[n]) " answer
+    #     if [[ $answer == y || $answer == yes ]]; then
+    #         read -p "What should be the file name of bash_aliases in $dbDots? " aliasname
+    #         mv ~/.bash_aliases $dbDots/$aliasname
+    #         ln -s $dbDots/aliasname ~/.bash_aliases
+    #         echo "Symlinked bash_aliases"
+    #     fi
+    # else
+    #     echo "No bash_aliases file found. Do you want to create one in $dbDots and symlink?"
+    #     read -p "Or, do you have a bash_aliases file in $dbDots that you want to symlink? (y/[n]) " answer
+    #     if [[ $answer == y || $answer == yes ]]; then
+    #         read -p "What is or should be the file name of bash_aliases in $dbDots? " aliasname
+    #         ln -s $dbDots/$aliasname ~/.bash_aliases
+    #         echo "Symlinked bash_aliases"
+    #     fi
+    # fi
 
     # Wezterm config
     ln -s $CWD/wezterm/wezterm.lua ~/.wezterm.lua
-
 }
 
 git() {
@@ -157,7 +156,7 @@ fonts() {
         ln -s $(realpath $ffile) "$USER_FONTS_DIR/$(basename $ffile)"
     done
     fc-cache -f -v
-    rm ~/.cache/matplotlib/*
+    rm ~/.cache/matplotlib/* || true
 }
 
 matplotlib() {
@@ -189,11 +188,11 @@ tmux() {
     # Install tmux on Mac or Linux.
     if [[ $(uname -s) == "Darwin" ]]; then
         # MacOS
-        brew install tmux 
+        brew install tmux
     else
         # Linux
         # Update the URL / version number if necessary.
-        wget https://github.com/nelsonenzo/tmux-appimage/releases/download/3.3a/tmux.appimage 
+        wget https://github.com/nelsonenzo/tmux-appimage/releases/download/3.3a/tmux.appimage
         chmod +x tmux.appimage
         mkdir -p ~/.local/bin
         mv tmux.appimage ~/.local/bin/tmux
