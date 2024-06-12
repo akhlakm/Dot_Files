@@ -488,6 +488,54 @@ math() {
 	echo "scale=4;$*" | bc
 }
 
+appimage-install() {
+	# Install an app image
+	appname=$1
+	appimage=$2
+
+	[[ -n $appimage ]] || {
+		echo "Usage: appimage-install <App name> <file.AppImage>"
+		return 1
+	}
+
+	installdir=/opt/appimages
+	sudo mkdir -p $installdir
+
+	sudo mv $appimage $installdir/$appname.AppImage
+	sudo chmod +x $installdir/$appname.AppImage
+
+	# extract the icon
+	mkdir -p /tmp/$appname.AppImage
+	cd /tmp/$appname.AppImage
+	$installdir/$appname.AppImage --appimage-extract
+	iconfile=$(find . -maxdepth 2 -name '*.png')
+	if [[ -f $iconfile ]]; then
+		sudo cp $iconfile $installdir/$appname.png
+	else
+		echo "WARN: No icon found in $appimage"
+	fi
+
+	cat << EOF > $appname.desktop
+[Desktop Entry]
+Type=Application
+Name=$appname
+Comment=$appname installed from $appimage
+Icon=$installdir/$appname.png
+Exec=$installdir/$appname.AppImage
+Terminal=false
+EOF
+	launcher=/usr/share/applications/$appname.desktop
+	sudo cp $appname.desktop $launcher
+	sudo chmod +x $launcher
+	echo
+	if [[ -f $launcher ]]; then
+		echo "Installation done: $launcher"
+		echo "You can run $appname from the launcher"
+	else
+		echo "Installation failed. Please check $installdir and $launcher"
+	fi
+}
+
 # create some env vars for applications
 export PASS=$(</dev/urandom tr -dc A-Za-z0-9_$#%*+=@$ | head -c16)
 if [[ ! -f ~/.passwords ]]; then
