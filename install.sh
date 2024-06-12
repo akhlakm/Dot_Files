@@ -43,9 +43,15 @@ bashrc(){
         ln -s $CWD/bashrc.sh ~/.bashrc
     else
         # centos
-        mv /etc/profile.d/bashrc.sh /etc/profile.d/bashrc.sh.backup
-        ln -s $CWD/bashrc.sh /etc/profile.d/bashrc.sh
+        if [[ -f /etc/profile.d/bashrc.sh ]]; then
+            mv /etc/profile.d/bashrc.sh /etc/profile.d/bashrc.sh.backup
+            ln -s $CWD/bashrc.sh /etc/profile.d/bashrc.sh
+        else
+            mv ~/.bashrc ~/.bashrc.backup
+            ln -s $CWD/bashrc.sh ~/.bashrc
+        fi
     fi
+
     echo "Symlinked $CWD/bashrc.sh, please restart session to take effect."
 
     # if [[ -f ~/.bash_aliases ]]; then
@@ -70,7 +76,7 @@ bashrc(){
     ln -s $CWD/wezterm/wezterm.lua ~/.wezterm.lua
 }
 
-git() {
+gitme() {
     git config --global user.name 'akhlakm'
     read -p "Git[hub] user.email? " email
         git config --global user.email $email
@@ -219,7 +225,7 @@ if [[ "$#" -lt 1 ]]; then
     echo -e "USAGE: $0 <command> [options...]\n"
 
     echo -e "\t bashrc - Install bashrc files."
-    echo -e "\t git - Setup git username and shell hooks."
+    echo -e "\t gitme - Setup git username and shell hooks."
     echo -e "\t docker - Install docker. (SU)"
     echo -e "\t nvidia_docker - Install GPU support for docker. (SU)"
     echo -e "\t swapfile - Setup swapfile. (SU)"
