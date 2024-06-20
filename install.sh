@@ -219,6 +219,30 @@ tmux() {
     fi
 }
 
+install-nodejs() {
+    # Install nvm
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+    # Load nvm
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    # Install node
+    nvm install node
+}
+
+update-nodejs() {
+    # Load nvm
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    # Update node
+    nvm install node
+    nvm alias default node
+}
+
 
 if [[ "$#" -lt 1 ]]; then
 
@@ -235,6 +259,8 @@ if [[ "$#" -lt 1 ]]; then
     echo -e "\t spotify - Setup spotify-client repo and install. (SU)"
     echo -e "\t neovim - Setup and install neovim (AppImage)."
     echo -e "\t tmux - Setup and install tmux (AppImage)."
+    echo -e "\t install-nodejs - Setup and install npm and nodejs."
+    echo -e "\t update-nodejs - Update npm and nodejs."
     echo
 
 else
