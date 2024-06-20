@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="2024.03a"
+version="24.06a"
 
 # path to dropbox dotfiles, update this if needed
 dbDots=/home/data/Dropbox/common/dotfiles
@@ -79,7 +79,7 @@ bashrc(){
 gitme() {
     git config --global user.name 'akhlakm'
     read -p "Git[hub] user.email? " email
-        git config --global user.email $email
+    git config --global user.email $email
 
     if [[ ! -f ~/.git-prompt.sh ]]; then
                 # download and use the official one
@@ -93,6 +93,22 @@ gitme() {
         source ~/.git-prompt.sh && echo "git-prompt loaded."
 }
 
+wezterm() {
+    if command -v wezterm; then
+        echo "wezterm already installed"
+    else
+        curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
+        sudo apt install curl
+        curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
+        echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
+        sudo apt update
+        sudo apt install wezterm
+    fi
+
+    [[ -f ~/.wezterm.lua ]] || ln -s $CWD/wezterm/wezterm.lua ~/.wezterm.lua
+}
+
+
 docker() {
     sudo apt install -y curl
     sudo curl https://get.docker.com | bash
@@ -105,7 +121,7 @@ docker() {
     docker ps
 }
 
-nvidia_docker() {
+nvidia-docker() {
     # sudo ./install.sh nvidia_docker
     #
     sudo apt install -y curl
@@ -130,12 +146,8 @@ swapfile() {
     free
 }
 
-miniconda() {
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    bash Miniconda3-latest-Linux-x86_64.sh
-    # /bin/rm Miniconda3-latest-Linux-x86_64.sh
-    source ~/.bashrc
-    conda --version
+libmamba() {
+    conda --version || die 1 "Please install conda first"
     conda update -n base conda
     conda install -n base conda-libmamba-solver
     conda config --set solver libmamba
@@ -250,14 +262,16 @@ if [[ "$#" -lt 1 ]]; then
 
     echo -e "\t bashrc - Install bashrc files."
     echo -e "\t gitme - Setup git username and shell hooks."
-    echo -e "\t docker - Install docker. (SU)"
-    echo -e "\t nvidia_docker - Install GPU support for docker. (SU)"
+    echo -e "\t docker - Install and setup docker and permissions. (SU)"
+    echo -e "\t nvidia-docker - Install GPU support for docker. (SU)"
     echo -e "\t swapfile - Setup swapfile. (SU)"
     echo -e "\t vmd - Setup vmdrc file."
+    echo -e "\t libmamba - Setup libmamba as conda solver."
     echo -e "\t fonts - Install custom user fonts."
     echo -e "\t matplotlib - Setup matplotlib style file."
     echo -e "\t spotify - Setup spotify-client repo and install. (SU)"
     echo -e "\t neovim - Setup and install neovim (AppImage)."
+    echo -e "\t wezterm - Setup and install wezterm. (SU)"
     echo -e "\t tmux - Setup and install tmux (AppImage)."
     echo -e "\t install-nodejs - Setup and install npm and nodejs."
     echo -e "\t update-nodejs - Update npm and nodejs."
