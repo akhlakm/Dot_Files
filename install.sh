@@ -147,11 +147,7 @@ swapfile() {
 }
 
 libmamba() {
-    conda --version || die 1 "Please install conda first"
-    conda update -n base conda
-    conda install -n base conda-libmamba-solver
-    conda config --set solver libmamba
-    echo "Done!"
+    echo "LibMamba is the default solver in newer conda versions."
 }
 
 spotify() {
