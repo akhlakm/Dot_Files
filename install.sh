@@ -251,6 +251,11 @@ update-nodejs() {
     nvm alias default node
 }
 
+maker() {
+    wget https://github.com/akhlakm/Maker/releases/latest/download/maker
+    chmod +x maker && cp -f maker ~/.local/bin
+}
+
 
 if [[ "$#" -lt 1 ]]; then
 
@@ -271,6 +276,7 @@ if [[ "$#" -lt 1 ]]; then
     echo -e "\t tmux - Setup and install tmux (AppImage)."
     echo -e "\t install-nodejs - Setup and install npm and nodejs."
     echo -e "\t update-nodejs - Update npm and nodejs."
+    echo -e "\t maker - Download and install Maker to .local/bin."
     echo
 
 else
