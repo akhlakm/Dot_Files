@@ -109,7 +109,7 @@ wezterm() {
 }
 
 
-docker() {
+getdocker() {
     sudo apt install -y curl
     sudo curl https://get.docker.com | bash
 
@@ -256,6 +256,31 @@ maker() {
     chmod +x maker && cp -f maker ~/.local/bin
 }
 
+relocate-docker() {
+    location=$1
+
+    currdir=$(docker info -f '{{ .DockerRootDir}}')
+    echo "Current docker directory: $currdir"
+
+    [[ -n $location ]] || { echo "Usage: $0 relocate-docker <new location>"; exit 2; }
+    sudo mkdir -p $location || exit 3
+
+    echo "stopping docker services ..."
+    sudo systemctl stop docker
+    sudo systemctl stop docker.socket
+    sudo systemctl stop containerd
+
+    echo "moving current directory ..."
+    sudo mv $currdir $location || exit 4
+
+    echo "Please run vim /etc/docker/daemon.json and add the following:"
+    echo "{\"data-root\": \"${location}/docker\"}"
+
+    echo
+    echo "Finally restart the docker service."
+    echo "sudo systemctl restart docker"
+}
+
 
 if [[ "$#" -lt 1 ]]; then
 
@@ -263,7 +288,7 @@ if [[ "$#" -lt 1 ]]; then
 
     echo -e "\t bashrc - Install bashrc files."
     echo -e "\t gitme - Setup git username and shell hooks."
-    echo -e "\t docker - Install and setup docker and permissions. (SU)"
+    echo -e "\t getdocker - Install and setup docker and permissions. (SU)"
     echo -e "\t nvidia-docker - Install GPU support for docker. (SU)"
     echo -e "\t swapfile - Setup swapfile. (SU)"
     echo -e "\t vmd - Setup vmdrc file."
@@ -277,6 +302,7 @@ if [[ "$#" -lt 1 ]]; then
     echo -e "\t install-nodejs - Setup and install npm and nodejs."
     echo -e "\t update-nodejs - Update npm and nodejs."
     echo -e "\t maker - Download and install Maker to .local/bin."
+    echo -e "\t relocate-docker - Move docker images directory to a new location."
     echo
 
 else
