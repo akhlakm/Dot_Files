@@ -619,6 +619,35 @@ quarto-docs() {
 	echo "QuartoDocs created"
 }
 
+auto() {
+	## Run auto scripts from the autoscripts directory
+	if [[ -z $AUTODIR ]]; then
+		echo "Please set the AUTODIR environment variable."
+		return 1
+	fi
+
+	if [[ -z $1 ]]; then
+		echo "Usage: auto <script-name>"
+		echo "AUTODIR=$AUTODIR"
+		return 1
+	fi
+
+	# script path is the first argument
+	script=$AUTODIR/$1
+
+	# check if script exists
+	if [[ -f $script ]]; then
+		# Run the script with the rest of the arguments
+		shift
+		$script $@
+	else
+		echo "Script not found: $script"
+		echo "AUTODIR=$AUTODIR"
+		return 1
+	fi
+}
+
+
 CONDAHOME=~/miniconda3
 
 # END OF BASHRC DEFINITIONS
@@ -638,6 +667,7 @@ else
 
 # xterm_setcolor \$green \$RED
 
+# export AUTODIR=
 # export CONDAHOME=${CONDAHOME}
 
 EOF
