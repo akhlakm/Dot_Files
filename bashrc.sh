@@ -647,6 +647,7 @@ auto() {
 	fi
 }
 
+alias run=./run
 
 CONDAHOME=~/miniconda3
 
