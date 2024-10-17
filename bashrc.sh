@@ -141,16 +141,6 @@ git_prompt() {
 	unset git_prompt
 }
 
-# Makefile at the home directory.
-# Useful to automate setups.
-# ---------------------------------
-if havecmd make; then
-	if [[ ! -f ~/Makefile ]]; then
-		if [[ -f ~/Dot_Files/Makefile ]]; then
-			ln -s Dot_Files/Makefile Makefile
-		fi
-	fi
-fi
 
 # Git helpers
 # Some later items depend on it.
@@ -323,13 +313,8 @@ alias cp='cp -i'
 
 # alias rm='rm -I'
 # for some reason I always mess up mv with rm
-# so here is this override of rm
 alias rm="echo 'Please use remove to delete'"
 alias remove="/bin/rm -I"
-
-# text to speak
-# example 'say "ding dong"'
-alias say='spd-say'
 
 # display sorted directory file size
 alias dus="du --max-depth=1 | sort -nr"
@@ -383,7 +368,6 @@ search() {
 # ---------------------------------
 alias bashrc='${EDITOR} ~/.bashrc'
 alias bashaliases='${EDITOR} ~/.bash_aliases'
-alias installer='${EDITOR} ~/.installer.sh'
 if havecmd git; then alias gitconfig='${EDITOR} ~/.gitconfig'; fi
 
 # source bashrc
@@ -397,7 +381,6 @@ alias cddl='cd ~/Downloads'
 alias cddoc='cd ~/Documents'
 alias cdt='cd /tmp'
 alias cdmed='cd /media/$(whoami)'
-alias cdws='cd ~/work-Space'
 
 __test -d ~/Dropbox 			&&  alias cddb='cd ~/Dropbox'
 __test -d ~/mnt 				&&	alias cdm='cd ~/mnt'
@@ -536,14 +519,6 @@ EOF
 	fi
 }
 
-# create some env vars for applications
-export PASS=$(</dev/urandom tr -dc A-Za-z0-9_$#%*+=@$ | head -c16)
-if [[ ! -f ~/.passwords ]]; then
-	echo "# List of bashrc auto-generated passwords." > ~/.passwords
-fi
-echo $PASS >> ~/.passwords
-alias pass="tail -n 1 ~/.passwords"
-
 # SSH Operations
 # ---------------------------------
 
@@ -605,20 +580,6 @@ shutup() {
     sudo apt update && sudo apt upgrade -y && sudo shutdown
 }
 
-sphinx-docs() {
-	dotdir=$(dirname $(realpath ~/.bashrc))
-	mkdir -p docs
-	rsync -avrRh $dotdir/sphinx/./ docs/./ || exit 1
-	echo "SphinxDocs created"
-}
-
-quarto-docs() {
-	dotdir=$(dirname $(realpath ~/.bashrc))
-	mkdir -p docs
-	rsync -avrRh $dotdir/quarto/./ docs/./ || exit 1
-	echo "QuartoDocs created"
-}
-
 auto() {
 	## Run auto scripts from the autoscripts directory
 	if [[ -z $AUTODIR ]]; then
@@ -646,8 +607,6 @@ auto() {
 		return 1
 	fi
 }
-
-alias run=./run
 
 CONDAHOME=~/miniconda3
 
@@ -703,3 +662,4 @@ unset __conda_setup
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
