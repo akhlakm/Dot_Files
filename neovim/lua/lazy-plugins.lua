@@ -82,37 +82,38 @@ require("lazy").setup({
 	-- require("plugins.quarto"),
 
 	-- require 'plugins.debug',
+
 	require("plugins.indent_line"),
 
-	require("plugins.iron"),
+	-- require("plugins.iron"),
 
 	-- require("plugins.venv_selector"),
 
 	-- Load the local sphinx plugin
-	{
-		dir = "sphinx",
-		dev = true,
-		config = function()
-			require("sphinx").setup({
-				test = "hello",
-			})
-		end,
-	},
+	-- {
+	-- 	dir = "sphinx",
+	-- 	dev = true,
+	-- 	config = function()
+	-- 		require("sphinx").setup({
+	-- 			test = "hello",
+	-- 		})
+	-- 	end,
+	-- },
 
 	-- Load a local plugin.
-	{
-		dir = "nota",
-		name = "nota",
-		dev = true,
-		config = function()
-			require("nota").setup({
-				global_path = "nota/notes/",
-				scratch_path = "nota/scratch/",
-				local_path = "project-notes/",
-				vertical_split = true,
-			})
-		end,
-	},
+	-- {
+	-- 	dir = "nota",
+	-- 	name = "nota",
+	-- 	dev = true,
+	-- 	config = function()
+	-- 		require("nota").setup({
+	-- 			global_path = "nota/notes/",
+	-- 			scratch_path = "nota/scratch/",
+	-- 			local_path = "project-notes/",
+	-- 			vertical_split = true,
+	-- 		})
+	-- 	end,
+	-- },
 }, {
 	ui = {
 		-- If you have a Nerd Font, set icons to an empty table which will use the

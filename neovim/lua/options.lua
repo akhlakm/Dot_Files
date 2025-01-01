@@ -69,7 +69,7 @@ vim.opt.colorcolumn = "90" -- vertical bar at column 90
 vim.opt.completeopt = "menuone"
 vim.opt.iskeyword:append("-")
 
--- Some of these options may get overwritten, or require plugins to load first.
+-- NOTE: Some of these options may get overwritten, or require plugins to load first.
 -- Add those options of init.lua after loading the plugins.
 
 -- Highlight when yanking (copying) text

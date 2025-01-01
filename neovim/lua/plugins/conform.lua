@@ -1,4 +1,4 @@
--- This plugin autoformat a file on save.
+-- This plugin autoformats a file on save.
 
 return {
 	{ -- Autoformat
