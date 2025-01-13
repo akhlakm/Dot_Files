@@ -171,6 +171,15 @@ if havecmd git; then
 		git commit -m "${msg}"
 	}
 
+	gitm() {
+		# make sure arguments are passed
+		[[ $# -eq 0 ]] && {
+			echo "Usage: gitm <commit message>"
+			return 1
+		}
+		git commit -m "${*}"
+	}
+
 	# git oneliner log
 	alias gitol='git log --oneline -n'
 
