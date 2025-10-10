@@ -618,6 +618,19 @@ auto() {
 	fi
 }
 
+jlab-server() {
+	# Start Jupyter Lab server
+	# You can access it at http://localhost:9009
+	jupyter lab  \
+		--port=9009 \
+		--ip=0.0.0.0 \
+		--no-browser \
+		--FileCheckpoints.checkpoint_dir=/tmp \
+		--ServerApp.token='' \
+		--ServerApp.password=''
+}
+
+
 CONDAHOME=~/miniconda3
 
 # END OF BASHRC DEFINITIONS
