@@ -599,6 +599,7 @@ auto() {
 	if [[ -z $1 ]]; then
 		echo "Usage: auto <script-name>"
 		echo "AUTODIR=$AUTODIR"
+		ls $AUTODIR
 		return 1
 	fi
 
