@@ -620,9 +620,8 @@ auto() {
 
 jlab-server() {
 	# Start Jupyter Lab server
-	# You can access it at http://localhost:9009
 	jupyter lab  \
-		--port=9009 \
+		--port=9010 \
 		--ip=0.0.0.0 \
 		--no-browser \
 		--FileCheckpoints.checkpoint_dir=/tmp \
