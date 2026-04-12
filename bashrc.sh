@@ -319,6 +319,9 @@ alias remove="/bin/rm -I"
 # display sorted directory file size
 alias dus="du --max-depth=1 | sort -nr"
 
+# display sorted directory file size with human readable format and only show files larger than 1MB
+alias biggest='du -chax --max-depth=1 . | grep "^[0-9\.]*[MGT]" | sort -h'
+
 # grep history
 # you can run a command from history by typing
 # !N where N is the command number in history
@@ -414,6 +417,10 @@ here() {
 
 	if havecmd nautilus; then
 		nautilus "$path" &
+	elif havecmd xdg-open; then
+		xdg-open "$path" &
+	elif havecmd dolphin; then
+		dolphin "$path" &
 	elif havecmd explorer; then
 		# cygwin or git-bash
 		explorer "$path" &
@@ -608,8 +615,6 @@ auto() {
 	fi
 }
 
-CONDAHOME=~/miniconda3
-
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------
 # Load the local aliases and then the bash completion at the end,
@@ -645,21 +650,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Set Conda init. Update CONDAHOME from bash_aliases if necessary.
-__conda_setup="$('$CONDAHOME/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "$CONDAHOME/etc/profile.d/conda.sh" ]; then
-        . "$CONDAHOME/etc/profile.d/conda.sh"
-    else
-        export PATH="$CONDAHOME/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-
 # Works if NVM is installed (for node.js).
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Works if Rust is installed.
+[ -f "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
