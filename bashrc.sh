@@ -171,6 +171,15 @@ if havecmd git; then
 		git commit -m "${msg}"
 	}
 
+	gitm() {
+		# make sure arguments are passed
+		[[ $# -eq 0 ]] && {
+			echo "Usage: gitm <commit message>"
+			return 1
+		}
+		git commit -m "${*}"
+	}
+
 	# git oneliner log
 	alias gitol='git log --oneline -n'
 
@@ -597,6 +606,7 @@ auto() {
 	if [[ -z $1 ]]; then
 		echo "Usage: auto <script-name>"
 		echo "AUTODIR=$AUTODIR"
+		ls $AUTODIR
 		return 1
 	fi
 
@@ -614,6 +624,18 @@ auto() {
 		return 1
 	fi
 }
+
+jlab-server() {
+	# Start Jupyter Lab server
+	jupyter lab  \
+		--port=9010 \
+		--ip=0.0.0.0 \
+		--no-browser \
+		--FileCheckpoints.checkpoint_dir=/tmp \
+		--ServerApp.token='' \
+		--ServerApp.password=''
+}
+
 
 # END OF BASHRC DEFINITIONS
 # -----------------------------------------------------------------
