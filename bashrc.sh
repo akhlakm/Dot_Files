@@ -626,14 +626,18 @@ auto() {
 }
 
 jlab-server() {
-	# Start Jupyter Lab server
-	jupyter lab  \
+	# Start Jupyter Lab server in the background
+	# Logs are saved to jlab-server.log
+	# Usage: jlab-server
+	nohup jupyter lab  \
 		--port=9010 \
 		--ip=0.0.0.0 \
 		--no-browser \
 		--FileCheckpoints.checkpoint_dir=/tmp \
 		--ServerApp.token='' \
-		--ServerApp.password=''
+		--ServerApp.password='' &> jlab-server.log &
+	echo "Jupyter Lab server started on port 9010"
+	echo "Logs are saved to jlab-server.log"
 }
 
 
