@@ -69,8 +69,7 @@ config.keys = {
 	{ -- Close Tab
 		key = "DownArrow",
 		mods = is_darwin() and "CMD" or "CTRL",
-		action = wezterm.action.CloseCurrentTab({ confirm = false,
-  {key="Enter", mods="SHIFT", action=wezterm.action{SendString="\x1b\r"}},}),
+		action = wezterm.action.CloseCurrentTab({ confirm = false }),
 	},
 
 	{ -- New Tab
