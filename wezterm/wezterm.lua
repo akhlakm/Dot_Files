@@ -65,7 +65,8 @@ config.font = wezterm.font("CaskaydiaCove Nerd Font")
 -- Leader key
 config.leader = { key = "\\", mods = "CTRL", timeout_milliseconds = 1000 }
 
-config.keys = {{ -- Close Tab
+config.keys = {
+	{ -- Close Tab
 		key = "DownArrow",
 		mods = is_darwin() and "CMD" or "CTRL",
 		action = wezterm.action.CloseCurrentTab({ confirm = false,

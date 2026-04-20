@@ -455,7 +455,12 @@ function open () {
 
 # Ignore a dropbox folder
 dbignore() {
-	attr -s com.dropbox.ignored -V 1 "$1"
+	if [[ $(uname -s) == "Darwin" ]]; then
+		xattr -w com.dropbox.ignored 1 $(realpath "$1")
+		xattr -w 'com.apple.fileprovider.ignore#P' 1 $(realpath "$1")
+	else
+		attr -s com.dropbox.ignored -V 1 "$1"
+	fi
 }
 
 # from https://github.com/trentm/dotfiles/blob/master/home/.bashrc
