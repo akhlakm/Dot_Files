@@ -60,7 +60,11 @@ config.default_prog = { "bash", "-l" }
 -- config.color_scheme = "Material"
 
 -- font
-config.font = wezterm.font("CaskaydiaCove Nerd Font")
+config.font = wezterm.font_with_fallback({
+	"CaskaydiaCove Nerd Font",
+	"Fira Code",
+	"JetBrains Mono",
+})
 
 -- Leader key
 config.leader = { key = "\\", mods = "CTRL", timeout_milliseconds = 1000 }
